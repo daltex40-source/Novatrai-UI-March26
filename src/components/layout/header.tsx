@@ -1,6 +1,7 @@
-import { Bell, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { useCommandPalette } from "./command-palette-provider";
+import { NotificationCenter } from "./notification-center";
 
 const titles: Record<string, string> = {
   "/": "Dashboard",
@@ -28,9 +29,7 @@ export function Header() {
         <button className="rounded-md p-2 hover:bg-muted" aria-label="Search" onClick={() => setOpen(true)}>
           <Search className="h-4 w-4" />
         </button>
-        <button className="rounded-md p-2 hover:bg-muted" aria-label="Notifications">
-          <Bell className="h-4 w-4" />
-        </button>
+        <NotificationCenter />
       </div>
     </header>
   );

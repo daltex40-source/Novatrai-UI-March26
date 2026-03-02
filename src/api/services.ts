@@ -435,3 +435,249 @@ export async function linkInvoiceToCase(invoiceId: string, caseId: string): Prom
   );
   writeInvoicesToStorage(next);
 }
+
+export type DashboardSummaryKpis = {
+  pipelineValue: number;
+  openDeals: number;
+  winRate: number | null;
+  atRiskDeals: number;
+  cashAvailable: number | null;
+  netPosition: number | null;
+  revenueMtd: number | null;
+  overdueInvoices: number;
+};
+
+function parseNumeric(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  const normalized = firstString(value).replaceAll(/[^\d.-]/g, "");
+  if (!normalized) return null;
+  const parsed = Number.parseFloat(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function normalizeObject(payload: unknown): Record<string, unknown> {
+  if (!payload || typeof payload !== "object") return {};
+  return payload as Record<string, unknown>;
+}
+
+export async function getDashboardSummaryKpis(): Promise<DashboardSummaryKpis> {
+  const [dashboardKpisResult, pipelineBoardResult, invoicesResult, financeOverviewResult] = await Promise.allSettled([
+    apiGetRaw("/dashboard/kpis"),
+    getPipelineBoard(),
+    getInvoices(),
+    apiGetRaw("/finance/overview"),
+  ]);
+
+  const dashboardKpisRaw = dashboardKpisResult.status === "fulfilled" ? normalizeObject(dashboardKpisResult.value) : {};
+  const financeOverviewRaw = financeOverviewResult.status === "fulfilled" ? normalizeObject(financeOverviewResult.value) : {};
+  const invoices = invoicesResult.status === "fulfilled" ? invoicesResult.value : [];
+
+  let pipelineValue = 0;
+  let openDeals = 0;
+  let atRiskDeals = 0;
+  let winRate: number | null = null;
+
+  if (pipelineBoardResult.status === "fulfilled") {
+    pipelineValue = pipelineBoardResult.value.stages.reduce(
+      (sum, stage) => sum + stage.deals.reduce((dealSum, deal) => dealSum + deal.value, 0),
+      0,
+    );
+    openDeals = pipelineBoardResult.value.stages.reduce((sum, stage) => sum + stage.deals.length, 0);
+    atRiskDeals = pipelineBoardResult.value.stages.reduce(
+      (sum, stage) => sum + stage.deals.filter((deal) => deal.atRisk).length,
+      0,
+    );
+  }
+
+  const dashboardPipeline = normalizeObject(dashboardKpisRaw.pipeline);
+  const dashboardCollections = normalizeObject(dashboardKpisRaw.collections);
+
+  const pipelineValueFromDashboard =
+    parseNumeric(dashboardKpisRaw.pipeline_value) ??
+    parseNumeric(dashboardPipeline.value) ??
+    parseNumeric(dashboardKpisRaw.pipelineValue);
+  const openDealsFromDashboard = parseNumeric(dashboardKpisRaw.open_deals) ?? parseNumeric(dashboardKpisRaw.openDeals);
+  const winRateFromDashboard =
+    parseNumeric(dashboardKpisRaw.win_rate) ?? parseNumeric(dashboardKpisRaw.winRate) ?? parseNumeric(dashboardPipeline.win_rate);
+
+  const cashAvailable =
+    parseNumeric(financeOverviewRaw.cash_available) ??
+    parseNumeric(financeOverviewRaw.cashAvailable) ??
+    parseNumeric(dashboardCollections.cash_available);
+  const netPosition =
+    parseNumeric(financeOverviewRaw.net_position) ??
+    parseNumeric(financeOverviewRaw.netPosition) ??
+    parseNumeric(dashboardCollections.net_position);
+  const revenueMtd =
+    parseNumeric(financeOverviewRaw.revenue_mtd) ??
+    parseNumeric(financeOverviewRaw.revenueMTD) ??
+    parseNumeric(dashboardCollections.revenue_mtd);
+
+  return {
+    pipelineValue: pipelineValueFromDashboard ?? pipelineValue,
+    openDeals: openDealsFromDashboard ?? openDeals,
+    winRate: winRateFromDashboard,
+    atRiskDeals,
+    cashAvailable,
+    netPosition,
+    revenueMtd,
+    overdueInvoices: invoices.filter((invoice) => normalizeStatus(invoice.status, "") === "OVERDUE").length,
+  };
+}
+
+export type DealTimelineEvent = {
+  id: string;
+  label: string;
+  timestamp: string;
+};
+
+export type DealLinkedItem = {
+  id: string;
+  label: string;
+  type: "DOCUMENT" | "CASE" | "ENTITY";
+};
+
+export type DealDrawerData = {
+  timeline: DealTimelineEvent[];
+  linked: DealLinkedItem[];
+};
+
+function normalizeTimelineEvent(raw: unknown): DealTimelineEvent | null {
+  if (!raw || typeof raw !== "object") return null;
+  const item = raw as Record<string, unknown>;
+  const id = firstString(item.id, item.event_id, item.history_id, crypto.randomUUID());
+  const label = firstString(item.text, item.label, item.description, item.note, item.message);
+  if (!label) return null;
+  return {
+    id,
+    label,
+    timestamp: firstString(item.created_at, item.createdAt, item.timestamp, new Date().toISOString()),
+  };
+}
+
+function normalizeLinkedItem(raw: unknown): DealLinkedItem | null {
+  if (!raw || typeof raw !== "object") return null;
+  const item = raw as Record<string, unknown>;
+  const id = firstString(item.id, item.document_id, item.entity_id);
+  const label = firstString(item.title, item.name, item.label);
+  if (!id || !label) return null;
+
+  const typeRaw = normalizeStatus(item.type ?? item.entity_type ?? item.entityType, "DOCUMENT");
+  let type: DealLinkedItem["type"] = "ENTITY";
+  if (typeRaw.includes("DOC")) type = "DOCUMENT";
+  if (typeRaw.includes("CASE")) type = "CASE";
+
+  return { id, label, type };
+}
+
+export async function getDealDrawerData(dealId: string): Promise<DealDrawerData> {
+  const [detailResult, timelineResult, historyResult, linkedDocsResult] = await Promise.allSettled([
+    apiGetRaw(`/deals/${encodeURIComponent(dealId)}`),
+    apiGetRaw(`/deals/${encodeURIComponent(dealId)}/timeline?limit=30`),
+    apiGetRaw(`/deals/${encodeURIComponent(dealId)}/stage-history?limit=30`),
+    apiGetRaw(`/document-instances?entityType=Deal&entityId=${encodeURIComponent(dealId)}&limit=20`),
+  ]);
+
+  const timelineItems = [
+    ...extractItems(timelineResult.status === "fulfilled" ? timelineResult.value : null),
+    ...extractItems(historyResult.status === "fulfilled" ? historyResult.value : null),
+  ]
+    .map(normalizeTimelineEvent)
+    .filter((item): item is DealTimelineEvent => item !== null)
+    .slice(0, 20);
+
+  const linked = extractItems(linkedDocsResult.status === "fulfilled" ? linkedDocsResult.value : null)
+    .map(normalizeLinkedItem)
+    .filter((item): item is DealLinkedItem => item !== null);
+
+  if (detailResult.status === "fulfilled") {
+    const detail = normalizeObject(detailResult.value);
+    const linkedCaseId = firstString(detail.case_id, detail.caseId, detail.linked_case_id);
+    const linkedCaseNumber = firstString(detail.case_number, detail.caseNumber, linkedCaseId);
+    if (linkedCaseId) {
+      linked.unshift({
+        id: linkedCaseId,
+        label: `Case ${linkedCaseNumber || linkedCaseId}`,
+        type: "CASE",
+      });
+    }
+  }
+
+  return {
+    timeline: timelineItems,
+    linked,
+  };
+}
+
+export type NotificationItem = {
+  id: string;
+  kind: "APPROVAL" | "TASK" | "EVENT";
+  title: string;
+  detail: string;
+  href: string;
+  timestamp: string;
+  unread: boolean;
+};
+
+export type NotificationCenterData = {
+  unreadCount: number;
+  items: NotificationItem[];
+};
+
+function normalizeActivityItem(raw: unknown): NotificationItem | null {
+  if (!raw || typeof raw !== "object") return null;
+  const item = raw as Record<string, unknown>;
+  const text = firstString(item.text, item.title, item.message);
+  if (!text) return null;
+  return {
+    id: firstString(item.id, crypto.randomUUID()),
+    kind: "EVENT",
+    title: text,
+    detail: firstString(item.time, item.detail, "Recent activity"),
+    href: "/",
+    timestamp: firstString(item.created_at, item.createdAt, new Date().toISOString()),
+    unread: true,
+  };
+}
+
+export async function getNotificationCenterData(): Promise<NotificationCenterData> {
+  const [approvals, tasks, activityResult] = await Promise.all([
+    getMyApprovals(),
+    getMyTasks(),
+    apiGetRaw("/dashboard/activity?limit=8").catch(() => [] as unknown),
+  ]);
+
+  const approvalItems: NotificationItem[] = approvals
+    .filter((item) => normalizeStatus(item.status, "") === "PENDING")
+    .map((item) => ({
+      id: `appr-${item.id}`,
+      kind: "APPROVAL",
+      title: `Approval pending: ${item.title}`,
+      detail: item.requester,
+      href: "/approvals",
+      timestamp: new Date().toISOString(),
+      unread: true,
+    }));
+
+  const taskItems: NotificationItem[] = tasks
+    .filter((item) => normalizeStatus(item.status, "") === "OVERDUE")
+    .map((item) => ({
+      id: `task-${item.id}`,
+      kind: "TASK",
+      title: `Overdue task: ${item.title}`,
+      detail: item.dueDate ? `Due ${item.dueDate}` : "Due date not set",
+      href: "/tasks",
+      timestamp: new Date().toISOString(),
+      unread: true,
+    }));
+
+  const eventItems = extractItems(activityResult)
+    .map(normalizeActivityItem)
+    .filter((item): item is NotificationItem => item !== null);
+
+  const items = [...approvalItems, ...taskItems, ...eventItems].slice(0, 20);
+  return {
+    unreadCount: items.filter((item) => item.unread).length,
+    items,
+  };
+}

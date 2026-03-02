@@ -8,13 +8,15 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { useEffect, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getPipelineBoard,
+  getDealDrawerData,
   markDealWon,
   moveDeal,
   type DealCard,
+  type DealDrawerData,
   type PipelineBoard,
   type PipelineStage,
 } from "@/api/services";
@@ -24,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const emptyBoard: PipelineBoard = { pipelineId: "", stages: [] };
+const emptyDealDrawerData: DealDrawerData = { timeline: [], linked: [] };
 
 type SelectedDeal = {
   deal: DealCard;
@@ -121,7 +124,7 @@ function DraggableDealCard({ deal, stageId, isBusy, onSelect, onMarkWon }: DealC
 
 type StageColumnProps = {
   stage: PipelineStage;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 function StageColumn({ stage, children }: StageColumnProps) {
@@ -155,6 +158,8 @@ export function PipelinePage() {
   const [busyDealId, setBusyDealId] = useState<string | null>(null);
   const [selectedDealId, setSelectedDealId] = useState<string | null>(null);
   const [createdCaseId, setCreatedCaseId] = useState<string | null>(null);
+  const [dealDrawerData, setDealDrawerData] = useState<DealDrawerData>(emptyDealDrawerData);
+  const [dealDrawerLoading, setDealDrawerLoading] = useState(false);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
 
@@ -186,6 +191,26 @@ export function PipelinePage() {
     }
     return null;
   }, [board.stages, selectedDealId]);
+
+  useEffect(() => {
+    if (!selectedDealId) {
+      setDealDrawerData(emptyDealDrawerData);
+      return;
+    }
+
+    const loadDrawerData = async () => {
+      setDealDrawerLoading(true);
+      try {
+        setDealDrawerData(await getDealDrawerData(selectedDealId));
+      } catch {
+        setDealDrawerData(emptyDealDrawerData);
+      } finally {
+        setDealDrawerLoading(false);
+      }
+    };
+
+    void loadDrawerData();
+  }, [selectedDealId]);
 
   const persistMove = async (dealId: string, toStageId: string) => {
     const previous = board;
@@ -303,12 +328,30 @@ export function PipelinePage() {
           <div className="space-y-2 text-sm">
             <p className="rounded-md border p-3">Deal entered stage: {selected?.stage.name ?? "Prospect"}.</p>
             <p className="rounded-md border p-3">Stage changes persist to backend with rollback on failure.</p>
+            {dealDrawerLoading ? <p className="text-muted-foreground">Loading timeline...</p> : null}
+            {!dealDrawerLoading && dealDrawerData.timeline.length === 0 ? (
+              <p className="text-muted-foreground">No timeline events returned by backend.</p>
+            ) : null}
+            {dealDrawerData.timeline.map((event) => (
+              <div key={event.id} className="rounded-md border p-3">
+                <p>{event.label}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{new Date(event.timestamp).toLocaleString()}</p>
+              </div>
+            ))}
           </div>
         }
         linked={
           <div className="space-y-2 text-sm">
             <p className="rounded-md border p-3">Linked Case: {createdCaseId ?? "None yet"}</p>
-            <p className="rounded-md border p-3">Linked Documents: Not connected in this phase.</p>
+            {dealDrawerLoading ? <p className="text-muted-foreground">Loading linked records...</p> : null}
+            {!dealDrawerLoading && dealDrawerData.linked.length === 0 ? (
+              <p className="text-muted-foreground">No linked records returned by backend.</p>
+            ) : null}
+            {dealDrawerData.linked.map((item) => (
+              <p key={item.id} className="rounded-md border p-3">
+                {item.type}: {item.label}
+              </p>
+            ))}
           </div>
         }
         financial={
