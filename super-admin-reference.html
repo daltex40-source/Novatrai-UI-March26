@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novatrai — Super Admin Industry Profile Reference</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0C1117;
+    --surface:   #141A22;
+    --elevated:  #1B2230;
+    --border:    rgba(255,255,255,0.08);
+    --accent:    #4A8FFF;
+    --success:   #3DD68C;
+    --warning:   #F0A843;
+    --danger:    #F07070;
+    --purple:    #B57BFF;
+    --pink:      #FF7BBB;
+    --teal:      #3DD6C8;
+    --text:      #E4EBF5;
+    --mid:       #9AABB8;
+    --muted:     #5A7080;
+    --radius:    10px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding: 0 0 80px;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 48px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .doc-header-logo {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, #4A8FFF, #B57BFF);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 18px; color: #fff;
+    flex-shrink: 0;
+  }
+  .doc-header-text h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+  .doc-header-text p  { font-size: 13px; color: var(--mid); margin-top: 2px; }
+  .doc-header-badge {
+    margin-left: auto;
+    background: rgba(74,143,255,0.15);
+    border: 1px solid rgba(74,143,255,0.3);
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── INTRO ── */
+  .doc-intro {
+    max-width: 960px;
+    margin: 48px auto 0;
+    padding: 0 48px;
+  }
+  .doc-intro h2 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+  .doc-intro p  { color: var(--mid); font-size: 14px; max-width: 720px; line-height: 1.8; }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .intro-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+  }
+  .intro-stat .n { font-size: 32px; font-weight: 800; color: var(--accent); }
+  .intro-stat .l { font-size: 12px; color: var(--mid); margin-top: 4px; }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    max-width: 960px;
+    margin: 56px auto 0;
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-divider h2 { font-size: 18px; font-weight: 700; white-space: nowrap; }
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── PROFILE CARD ── */
+  .profile-card {
+    max-width: 960px;
+    margin: 24px auto 0;
+    padding: 0 48px;
+  }
+  .profile-card-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  /* Profile header bar */
+  .profile-head {
+    padding: 24px 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .profile-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .profile-meta { flex: 1; }
+  .profile-meta h3 { font-size: 17px; font-weight: 700; }
+  .profile-meta .tagline { font-size: 13px; color: var(--mid); margin-top: 3px; }
+  .profile-tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .tag {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .tag-key     { background: rgba(74,143,255,0.12); color: var(--accent); border: 1px solid rgba(74,143,255,0.25); }
+  .tag-b2c     { background: rgba(61,214,140,0.1);  color: var(--success); border: 1px solid rgba(61,214,140,0.25); }
+  .tag-b2b     { background: rgba(181,123,255,0.1); color: var(--purple); border: 1px solid rgba(181,123,255,0.25); }
+  .tag-both    { background: rgba(240,168,67,0.1);  color: var(--warning); border: 1px solid rgba(240,168,67,0.25); }
+  .tag-inv-yes { background: rgba(61,214,140,0.1);  color: var(--success); border: 1px solid rgba(61,214,140,0.25); }
+  .tag-inv-no  { background: rgba(240,112,112,0.1); color: var(--danger);  border: 1px solid rgba(240,112,112,0.25); }
+  .tag-industry { background: rgba(255,255,255,0.06); color: var(--mid); border: 1px solid var(--border); }
+
+  /* Profile body — columns */
+  .profile-body {
+    display: grid;
+    grid-template-columns: 220px 1fr 1fr;
+    gap: 0;
+  }
+  .profile-col {
+    padding: 24px 24px;
+    border-right: 1px solid var(--border);
+  }
+  .profile-col:last-child { border-right: none; }
+  .col-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Sidebar list */
+  .sidebar-list { list-style: none; }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+  }
+  .sidebar-item:last-child { border-bottom: none; }
+  .si-icon { font-size: 14px; width: 20px; text-align: center; flex-shrink: 0; }
+  .si-label { flex: 1; font-weight: 500; }
+  .si-screen { font-size: 11px; color: var(--muted); }
+  .si-hidden { opacity: 0.4; }
+  .si-hidden .si-label::after {
+    content: ' (hidden)';
+    font-size: 10px;
+    color: var(--danger);
+    font-weight: 400;
+    font-style: italic;
+  }
+  .si-renamed { }
+  .si-renamed .si-screen::before { content: 'was: '; }
+
+  /* Pipeline stages */
+  .stage-list { display: flex; flex-direction: column; gap: 6px; }
+  .stage-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .stage-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .stage-label { flex: 1; font-weight: 500; }
+  .stage-badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .badge-won  { background: rgba(61,214,140,0.15);  color: var(--success); }
+  .badge-lost { background: rgba(240,112,112,0.15); color: var(--danger); }
+
+  .pipeline-meta {
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    font-size: 12px;
+  }
+  .pipeline-meta .pm-row { display: flex; justify-content: space-between; padding: 3px 0; }
+  .pipeline-meta .pm-key { color: var(--muted); }
+  .pipeline-meta .pm-val { font-weight: 600; color: var(--text); }
+
+  /* Labels table */
+  .label-table { width: 100%; font-size: 12px; border-collapse: collapse; }
+  .label-table tr { border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .label-table tr:last-child { border-bottom: none; }
+  .label-table td { padding: 6px 4px; vertical-align: top; }
+  .label-table .lk { color: var(--muted); width: 50%; }
+  .label-table .lv { font-weight: 600; color: var(--text); }
+
+  /* Features grid */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 0;
+  }
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    padding: 5px 0;
+  }
+  .fi-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .fi-on  { background: var(--success); }
+  .fi-off { background: var(--danger); opacity: 0.5; }
+  .fi-label { }
+  .fi-off-label { color: var(--muted); text-decoration: line-through; }
+
+  /* Templates */
+  .tpl-list { display: flex; flex-direction: column; gap: 5px; }
+  .tpl-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .tpl-ch {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+  }
+  .tpl-wa    { background: rgba(61,214,140,0.12); color: #3DD68C; }
+  .tpl-email { background: rgba(74,143,255,0.12); color: var(--accent); }
+  .tpl-name  { flex: 1; }
+
+  /* Composite section */
+  .composite-card {
+    max-width: 960px;
+    margin: 24px auto 0;
+    padding: 0 48px;
+  }
+  .composite-inner {
+    background: linear-gradient(135deg, rgba(74,143,255,0.08), rgba(181,123,255,0.08));
+    border: 1px solid rgba(74,143,255,0.2);
+    border-radius: 14px;
+    padding: 28px;
+  }
+  .composite-inner h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .composite-inner p { color: var(--mid); font-size: 13px; line-height: 1.7; margin-bottom: 20px; }
+  .composite-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .composite-table th {
+    text-align: left;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.04);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .composite-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+  }
+  .composite-table tr:last-child td { border-bottom: none; }
+  .combo { display: flex; gap: 6px; flex-wrap: wrap; }
+  .combo-tag {
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(74,143,255,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(74,143,255,0.25);
+  }
+
+  /* Quick ref table */
+  .quick-ref {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+  .quick-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .quick-table th {
+    text-align: left;
+    padding: 12px 14px;
+    background: var(--elevated);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 97px;
+  }
+  .quick-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: middle;
+  }
+  .quick-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .qr-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .key-code {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    background: rgba(255,255,255,0.06);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  /* Footer */
+  .doc-footer {
+    max-width: 960px;
+    margin: 64px auto 0;
+    padding: 0 48px;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  /* Accent colors per profile */
+  .ic-personal  { background: rgba(74,143,255,0.15); }
+  .ic-life      { background: rgba(181,123,255,0.15); }
+  .ic-commercial{ background: rgba(61,214,140,0.15); }
+  .ic-realestate{ background: rgba(240,168,67,0.15); }
+  .ic-accounting{ background: rgba(61,214,200,0.15); }
+  .ic-recruitment{background: rgba(255,123,187,0.15);}
+  .ic-solar     { background: rgba(240,168,67,0.15); }
+  .ic-trades    { background: rgba(240,168,67,0.15); }
+
+  /* Callout box */
+  .callout {
+    background: rgba(240,168,67,0.08);
+    border: 1px solid rgba(240,168,67,0.25);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 13px;
+    color: var(--mid);
+    margin-top: 20px;
+    line-height: 1.7;
+  }
+  .callout strong { color: var(--warning); }
+
+  /* Hide redundant header when embedded inside SA console iframe */
+  body.embedded .doc-header { display: none; }
+  body.embedded { padding-top: 0; }
+  body.embedded .quick-table th { top: 0; }
+
+  @media print {
+    body { background: #fff; color: #111; }
+    .doc-header { position: static; background: #f5f5f5; }
+    .profile-card-inner, .quick-ref .qr-wrap { border: 1px solid #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="doc-header">
+  <div class="doc-header-logo">N</div>
+  <div class="doc-header-text">
+    <h1>Novatrai — Industry Profile Reference</h1>
+    <p>Super Admin Guide · All 8 industry profiles · Labels, pipeline stages, features & composite rules</p>
+  </div>
+  <span class="doc-header-badge">SUPER ADMIN ONLY</span>
+</header>
+
+<!-- ── INTRO ── -->
+<div class="doc-intro">
+  <h2>What Are Industry Profiles?</h2>
+  <p>
+    When a new tenant completes the onboarding wizard, they select one or more industry profiles. The <strong>profile engine</strong>
+    (<code>applyProfile()</code> in admin.js) then dynamically relabels the sidebar navigation, renames pipeline stages,
+    configures feature gates, and loads industry-specific templates — all without any code changes.
+    <br><br>
+    As a super admin, you need to understand exactly what each profile does so you can correctly configure tenants,
+    troubleshoot label discrepancies, and advise clients on which profile fits their business.
+  </p>
+
+  <div class="intro-grid">
+    <div class="intro-stat"><div class="n">8</div><div class="l">Industry Profiles</div></div>
+    <div class="intro-stat"><div class="n">3</div><div class="l">Insurance Profiles (composable)</div></div>
+    <div class="intro-stat"><div class="n">50+</div><div class="l">Starter Templates across profiles</div></div>
+    <div class="intro-stat"><div class="n">∞</div><div class="l">Composite combos (insurance only)</div></div>
+  </div>
+
+  <div class="callout">
+    <strong>Why does a client see "Renewals Tracker" instead of "Pipeline"?</strong><br>
+    They are on the <strong>Personal Lines</strong> insurance profile. The profile engine renames "Pipeline" to "Renewals Tracker",
+    "Calendar" to "Renewals Calendar", and hides Companies and Invoices. This is by design — every label change you see is
+    driven by the profile config in <code>_novatraiProfileConfig</code>. Use this document to identify which profile is active
+    and what the expected naming should be.
+  </div>
+</div>
+
+<!-- ── QUICK REFERENCE TABLE ── -->
+<div class="section-divider"><h2>Quick Reference — All Profiles at a Glance</h2></div>
+<div class="quick-ref" style="margin-top:24px;">
+  <div class="qr-wrap">
+    <table class="quick-table">
+      <thead>
+        <tr>
+          <th>Profile</th>
+          <th>Key</th>
+          <th>Industry</th>
+          <th>Client Base</th>
+          <th>Invoicing</th>
+          <th>Pipeline Name</th>
+          <th>Deal Label</th>
+          <th>Contact Label</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🛡️ Personal Lines Broker</td>
+          <td><code class="key-code">personal_lines</code></td>
+          <td>Insurance</td>
+          <td>B2C</td>
+          <td style="color:var(--danger);">No</td>
+          <td>Renewals Tracker</td>
+          <td>Policy</td>
+          <td>Client</td>
+        </tr>
+        <tr>
+          <td>📈 Life &amp; Investments Broker</td>
+          <td><code class="key-code">life_invest</code></td>
+          <td>Insurance</td>
+          <td>B2C</td>
+          <td style="color:var(--danger);">No</td>
+          <td>Opportunities</td>
+          <td>Opportunity</td>
+          <td>Client</td>
+        </tr>
+        <tr>
+          <td>🏗️ Commercial Lines Broker</td>
+          <td><code class="key-code">commercial</code></td>
+          <td>Insurance</td>
+          <td>B2B</td>
+          <td style="color:var(--danger);">No</td>
+          <td>Commercial Pipeline</td>
+          <td>Account</td>
+          <td>Stakeholder</td>
+        </tr>
+        <tr>
+          <td>🏡 Real Estate Agency</td>
+          <td><code class="key-code">real_estate</code></td>
+          <td>Real Estate</td>
+          <td>B2C + B2B</td>
+          <td style="color:var(--success);">Yes</td>
+          <td>Listings Pipeline</td>
+          <td>Listing</td>
+          <td>Buyer / Tenant</td>
+        </tr>
+        <tr>
+          <td>🧾 Accounting &amp; Tax Practice</td>
+          <td><code class="key-code">accounting</code></td>
+          <td>Professional Services</td>
+          <td>B2C + B2B</td>
+          <td style="color:var(--success);">Yes</td>
+          <td>New Client Pipeline</td>
+          <td>Engagement</td>
+          <td>Client</td>
+        </tr>
+        <tr>
+          <td>🤝 Recruitment &amp; Staffing</td>
+          <td><code class="key-code">recruitment</code></td>
+          <td>Professional Services</td>
+          <td>B2C + B2B</td>
+          <td style="color:var(--success);">Yes</td>
+          <td>Active Vacancies</td>
+          <td>Vacancy</td>
+          <td>Candidate</td>
+        </tr>
+        <tr>
+          <td>☀️ Solar &amp; Energy Installer</td>
+          <td><code class="key-code">solar</code></td>
+          <td>Energy</td>
+          <td>B2C + B2B</td>
+          <td style="color:var(--success);">Yes</td>
+          <td>Installation Pipeline</td>
+          <td>Installation</td>
+          <td>Client</td>
+        </tr>
+        <tr>
+          <td>🔧 Trades &amp; Field Services</td>
+          <td><code class="key-code">trades</code></td>
+          <td>Trades</td>
+          <td>B2C + B2B</td>
+          <td style="color:var(--success);">Yes</td>
+          <td>Jobs Pipeline</td>
+          <td>Job</td>
+          <td>Client</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PROFILE 1 — PERSONAL LINES
+══════════════════════════════════════════════════════════════ -->
+<div class="section-divider"><h2>Profile 1 — Personal Lines Broker</h2></div>
+<div class="profile-card">
+  <div class="profile-card-inner">
+    <div class="profile-head">
+      <div class="profile-icon ic-personal">🛡️</div>
+      <div class="profile-meta">
+        <h3>Personal Lines Broker</h3>
+        <div class="tagline">Short-term insurance for individuals &amp; families</div>
+        <div class="profile-tags">
+          <span class="tag tag-key">personal_lines</span>
+          <span class="tag tag-industry">Insurance</span>
+          <span class="tag tag-b2c">B2C</span>
+          <span class="tag tag-inv-no">No Invoicing</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <!-- Sidebar -->
+      <div class="profile-col">
+        <div class="col-title">Sidebar Labels</div>
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><span class="si-icon">🏠</span><span class="si-label">Dashboard</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Contacts</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🔄</span><span class="si-label">Renewals Tracker</span><span class="si-screen">pipeline</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">📅</span><span class="si-label">Renewals Calendar</span><span class="si-screen">calendar</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🗂️</span><span class="si-label">Policy Vault</span><span class="si-screen">documents</span></li>
+          <li class="sidebar-item"><span class="si-icon">📋</span><span class="si-label">Templates</span></li>
+          <li class="sidebar-item"><span class="si-icon">✅</span><span class="si-label">Tasks</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Employees</span></li>
+          <li class="sidebar-item"><span class="si-icon">💵</span><span class="si-label">Pay Structures</span></li>
+          <li class="sidebar-item si-hidden"><span class="si-icon">🏢</span><span class="si-label">Companies</span></li>
+          <li class="sidebar-item si-hidden"><span class="si-icon">💰</span><span class="si-label">Invoices</span></li>
+        </ul>
+      </div>
+      <!-- Pipeline -->
+      <div class="profile-col">
+        <div class="col-title">Pipeline: Renewals Tracker</div>
+        <div class="pipeline-meta">
+          <div class="pm-row"><span class="pm-key">Card Label</span><span class="pm-val">Policy</span></div>
+          <div class="pm-row"><span class="pm-key">Value Label</span><span class="pm-val">Annual Premium</span></div>
+          <div class="pm-row"><span class="pm-key">Won Label</span><span class="pm-val">Renewed</span></div>
+          <div class="pm-row"><span class="pm-key">Lost Label</span><span class="pm-val">Lapsed</span></div>
+        </div>
+        <div class="stage-list">
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD68C"></div><span class="stage-label">On Risk</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F0A843"></div><span class="stage-label">Renewal Due (90 days)</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F07070"></div><span class="stage-label">Renewal Due (30 days)</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#4A8FFF"></div><span class="stage-label">Quote Sent</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD68C"></div><span class="stage-label">Renewed</span><span class="stage-badge badge-won">Won</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F07070"></div><span class="stage-label">Lapsed</span><span class="stage-badge badge-lost">Lost</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Label Overrides</div>
+        <table class="label-table">
+          <tr><td class="lk">Deal singular</td><td class="lv">Policy</td></tr>
+          <tr><td class="lk">Deal plural</td><td class="lv">Policies</td></tr>
+          <tr><td class="lk">Pipeline name</td><td class="lv">Renewals Tracker</td></tr>
+          <tr><td class="lk">Documents</td><td class="lv">Policy Vault</td></tr>
+          <tr><td class="lk">Add deal button</td><td class="lv">Track Policy</td></tr>
+        </table>
+      </div>
+      <!-- Features + Templates -->
+      <div class="profile-col">
+        <div class="col-title">Features</div>
+        <div class="feature-grid">
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Contacts</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Pipeline</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Calendar</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Documents</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Templates</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Tasks</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>WhatsApp</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Email Composer</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Relationship Score</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Companies</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Invoicing</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Financial</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Starter Templates</div>
+        <div class="tpl-list">
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Renewal Reminder — 90 Days</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Renewal Reminder — 30 Days (Urgent)</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Quote Follow-up (No Response)</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Welcome to Our Agency</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Claim Submission Support</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Policy Endorsement Confirmation</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Annual Review — Is Your Cover Still Right?</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PROFILE 2 — LIFE & INVESTMENTS
+══════════════════════════════════════════════════════════════ -->
+<div class="section-divider"><h2>Profile 2 — Life &amp; Investments Broker</h2></div>
+<div class="profile-card">
+  <div class="profile-card-inner">
+    <div class="profile-head">
+      <div class="profile-icon ic-life">📈</div>
+      <div class="profile-meta">
+        <h3>Life &amp; Investments Broker</h3>
+        <div class="tagline">Risk cover, retirement annuities &amp; investment portfolios</div>
+        <div class="profile-tags">
+          <span class="tag tag-key">life_invest</span>
+          <span class="tag tag-industry">Insurance</span>
+          <span class="tag tag-b2c">B2C</span>
+          <span class="tag tag-inv-no">No Invoicing</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="profile-col">
+        <div class="col-title">Sidebar Labels</div>
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><span class="si-icon">🏠</span><span class="si-label">Dashboard</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Contacts</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">📅</span><span class="si-label">Review Calendar</span><span class="si-screen">calendar</span></li>
+          <li class="sidebar-item"><span class="si-icon">🎯</span><span class="si-label">Opportunities</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🗂️</span><span class="si-label">Client Files</span><span class="si-screen">documents</span></li>
+          <li class="sidebar-item"><span class="si-icon">📋</span><span class="si-label">Templates</span></li>
+          <li class="sidebar-item"><span class="si-icon">✅</span><span class="si-label">Tasks</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Employees</span></li>
+          <li class="sidebar-item"><span class="si-icon">💵</span><span class="si-label">Pay Structures</span></li>
+          <li class="sidebar-item si-hidden"><span class="si-icon">🏢</span><span class="si-label">Companies</span></li>
+          <li class="sidebar-item si-hidden"><span class="si-icon">💰</span><span class="si-label">Invoices</span></li>
+        </ul>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Pipeline: Opportunities</div>
+        <div class="pipeline-meta">
+          <div class="pm-row"><span class="pm-key">Card Label</span><span class="pm-val">Opportunity</span></div>
+          <div class="pm-row"><span class="pm-key">Value Label</span><span class="pm-val">Monthly Premium</span></div>
+          <div class="pm-row"><span class="pm-key">Won Label</span><span class="pm-val">On Risk</span></div>
+          <div class="pm-row"><span class="pm-key">Lost Label</span><span class="pm-val">Not Proceeded</span></div>
+        </div>
+        <div class="stage-list">
+          <div class="stage-item"><div class="stage-dot" style="background:#9AABB8"></div><span class="stage-label">Prospect / Referral</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F0A843"></div><span class="stage-label">Needs Analysis</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#4A8FFF"></div><span class="stage-label">Proposal / Illustration</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#B57BFF"></div><span class="stage-label">Application Submitted</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD68C"></div><span class="stage-label">On Risk</span><span class="stage-badge badge-won">Won</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F07070"></div><span class="stage-label">Not Proceeded</span><span class="stage-badge badge-lost">Lost</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Label Overrides</div>
+        <table class="label-table">
+          <tr><td class="lk">Deal singular</td><td class="lv">Opportunity</td></tr>
+          <tr><td class="lk">Deal plural</td><td class="lv">Opportunities</td></tr>
+          <tr><td class="lk">Pipeline name</td><td class="lv">Opportunities</td></tr>
+          <tr><td class="lk">Documents</td><td class="lv">Client Files</td></tr>
+          <tr><td class="lk">Add deal button</td><td class="lv">New Opportunity</td></tr>
+        </table>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Features</div>
+        <div class="feature-grid">
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Contacts</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Pipeline</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Calendar</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Documents</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Templates</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Tasks</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>WhatsApp</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Email Composer</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Relationship Score</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Companies</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Invoicing</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Financial</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Starter Templates</div>
+        <div class="tpl-list">
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Annual Review Invitation</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Needs Analysis — Documents Required</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Policy Illustration Ready — Let's Connect</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Application Submitted — What Happens Next</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Birthday / Life Milestone Touchpoint</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">RA Maturity / Investment Milestone</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PROFILE 3 — COMMERCIAL LINES
+══════════════════════════════════════════════════════════════ -->
+<div class="section-divider"><h2>Profile 3 — Commercial Lines Broker</h2></div>
+<div class="profile-card">
+  <div class="profile-card-inner">
+    <div class="profile-head">
+      <div class="profile-icon ic-commercial">🏗️</div>
+      <div class="profile-meta">
+        <h3>Commercial Lines Broker</h3>
+        <div class="tagline">Business insurance for commercial &amp; corporate clients</div>
+        <div class="profile-tags">
+          <span class="tag tag-key">commercial</span>
+          <span class="tag tag-industry">Insurance</span>
+          <span class="tag tag-b2b">B2B</span>
+          <span class="tag tag-inv-no">No Invoicing</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="profile-col">
+        <div class="col-title">Sidebar Labels</div>
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><span class="si-icon">🏠</span><span class="si-label">Dashboard</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🏢</span><span class="si-label">Client Companies</span><span class="si-screen">companies</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🎯</span><span class="si-label">Commercial Pipeline</span><span class="si-screen">pipeline</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Contacts</span></li>
+          <li class="sidebar-item"><span class="si-icon">📅</span><span class="si-label">Calendar</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🗂️</span><span class="si-label">Policy &amp; Risk Files</span><span class="si-screen">documents</span></li>
+          <li class="sidebar-item"><span class="si-icon">📋</span><span class="si-label">Templates</span></li>
+          <li class="sidebar-item"><span class="si-icon">✅</span><span class="si-label">Tasks</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Employees</span></li>
+          <li class="sidebar-item"><span class="si-icon">💵</span><span class="si-label">Pay Structures</span></li>
+          <li class="sidebar-item si-hidden"><span class="si-icon">💰</span><span class="si-label">Invoices</span></li>
+        </ul>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Pipeline: Commercial Pipeline</div>
+        <div class="pipeline-meta">
+          <div class="pm-row"><span class="pm-key">Card Label</span><span class="pm-val">Account</span></div>
+          <div class="pm-row"><span class="pm-key">Value Label</span><span class="pm-val">Annual Premium</span></div>
+          <div class="pm-row"><span class="pm-key">Won Label</span><span class="pm-val">On Risk</span></div>
+          <div class="pm-row"><span class="pm-key">Lost Label</span><span class="pm-val">Declined / Market</span></div>
+        </div>
+        <div class="stage-list">
+          <div class="stage-item"><div class="stage-dot" style="background:#9AABB8"></div><span class="stage-label">Prospect</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F0A843"></div><span class="stage-label">Risk Survey Requested</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#4A8FFF"></div><span class="stage-label">Quote to Underwriter</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#B57BFF"></div><span class="stage-label">Proposal Presented</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD68C"></div><span class="stage-label">On Risk</span><span class="stage-badge badge-won">Won</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F07070"></div><span class="stage-label">Declined / Market</span><span class="stage-badge badge-lost">Lost</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Label Overrides</div>
+        <table class="label-table">
+          <tr><td class="lk">Deal singular</td><td class="lv">Account</td></tr>
+          <tr><td class="lk">Company label</td><td class="lv">Client Company</td></tr>
+          <tr><td class="lk">Contact label</td><td class="lv">Stakeholder</td></tr>
+          <tr><td class="lk">Documents</td><td class="lv">Policy &amp; Risk Files</td></tr>
+          <tr><td class="lk">Add deal button</td><td class="lv">New Account</td></tr>
+        </table>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Features</div>
+        <div class="feature-grid">
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Contacts</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Companies</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Pipeline</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Calendar</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Documents</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Templates</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Tasks</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>WhatsApp</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Email Composer</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Relationship Score</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Invoicing</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Financial</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Starter Templates</div>
+        <div class="tpl-list">
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Risk Survey Request</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Renewal Presentation Invitation</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Claims Procedure — Business Guide</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Cover Comparison — New vs Current</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Letter of Insurance / Compliance Cert</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PROFILE 4 — REAL ESTATE
+══════════════════════════════════════════════════════════════ -->
+<div class="section-divider"><h2>Profile 4 — Real Estate Agency</h2></div>
+<div class="profile-card">
+  <div class="profile-card-inner">
+    <div class="profile-head">
+      <div class="profile-icon ic-realestate">🏡</div>
+      <div class="profile-meta">
+        <h3>Real Estate Agency</h3>
+        <div class="tagline">Property sales and rentals — residential &amp; commercial</div>
+        <div class="profile-tags">
+          <span class="tag tag-key">real_estate</span>
+          <span class="tag tag-industry">Real Estate</span>
+          <span class="tag tag-both">B2C + B2B</span>
+          <span class="tag tag-inv-yes">Invoicing On</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="profile-col">
+        <div class="col-title">Sidebar Labels</div>
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><span class="si-icon">🏠</span><span class="si-label">Dashboard</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🏡</span><span class="si-label">Listings Pipeline</span><span class="si-screen">pipeline</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">👥</span><span class="si-label">Buyers &amp; Tenants</span><span class="si-screen">contacts</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">📅</span><span class="si-label">Viewings Calendar</span><span class="si-screen">calendar</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🗂️</span><span class="si-label">Property Files</span><span class="si-screen">documents</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">💰</span><span class="si-label">Commission Invoices</span><span class="si-screen">invoices</span></li>
+          <li class="sidebar-item"><span class="si-icon">📋</span><span class="si-label">Templates</span></li>
+          <li class="sidebar-item"><span class="si-icon">✅</span><span class="si-label">Tasks</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Employees</span></li>
+          <li class="sidebar-item"><span class="si-icon">💵</span><span class="si-label">Pay Structures</span></li>
+          <li class="sidebar-item si-hidden"><span class="si-icon">🏢</span><span class="si-label">Companies</span></li>
+        </ul>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Pipeline: Listings Pipeline</div>
+        <div class="pipeline-meta">
+          <div class="pm-row"><span class="pm-key">Card Label</span><span class="pm-val">Listing</span></div>
+          <div class="pm-row"><span class="pm-key">Value Label</span><span class="pm-val">Property Value</span></div>
+          <div class="pm-row"><span class="pm-key">Won Label</span><span class="pm-val">Transferred</span></div>
+          <div class="pm-row"><span class="pm-key">Lost Label</span><span class="pm-val">Fallen Through</span></div>
+        </div>
+        <div class="stage-list">
+          <div class="stage-item"><div class="stage-dot" style="background:#9AABB8"></div><span class="stage-label">Mandate / Listed</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F0A843"></div><span class="stage-label">Viewing Scheduled</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#4A8FFF"></div><span class="stage-label">Offer Received</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#B57BFF"></div><span class="stage-label">OTP / Lease Signed</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD68C"></div><span class="stage-label">Transferred / Let</span><span class="stage-badge badge-won">Won</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F07070"></div><span class="stage-label">Fallen Through</span><span class="stage-badge badge-lost">Lost</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Label Overrides</div>
+        <table class="label-table">
+          <tr><td class="lk">Deal singular</td><td class="lv">Listing</td></tr>
+          <tr><td class="lk">Contact label</td><td class="lv">Buyer / Tenant</td></tr>
+          <tr><td class="lk">Documents</td><td class="lv">Property Files</td></tr>
+          <tr><td class="lk">Invoices</td><td class="lv">Commission Invoices</td></tr>
+          <tr><td class="lk">Add deal button</td><td class="lv">New Listing</td></tr>
+        </table>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Features</div>
+        <div class="feature-grid">
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Contacts</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Pipeline</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Calendar</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Documents</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Invoicing</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Templates</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Tasks</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>WhatsApp</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Email Composer</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Relationship Score</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Companies</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Financial</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Starter Templates</div>
+        <div class="tpl-list">
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">New Listing Alert — Matches Your Brief</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Viewing Confirmation &amp; Property Details</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Offer Submitted — Next Steps &amp; Timeline</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">OTP Signed — Conditions &amp; Transfer Process</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Transfer / Registration Milestone Update</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Rental Renewal — Lease Expires in 60 Days</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Post-Sale Check-In — Settling In?</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PROFILE 5 — ACCOUNTING & TAX
+══════════════════════════════════════════════════════════════ -->
+<div class="section-divider"><h2>Profile 5 — Accounting &amp; Tax Practice</h2></div>
+<div class="profile-card">
+  <div class="profile-card-inner">
+    <div class="profile-head">
+      <div class="profile-icon ic-accounting">🧾</div>
+      <div class="profile-meta">
+        <h3>Accounting &amp; Tax Practice</h3>
+        <div class="tagline">Tax returns, year-end accounts &amp; compliance management</div>
+        <div class="profile-tags">
+          <span class="tag tag-key">accounting</span>
+          <span class="tag tag-industry">Professional Services</span>
+          <span class="tag tag-both">B2C + B2B</span>
+          <span class="tag tag-inv-yes">Invoicing On</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="profile-col">
+        <div class="col-title">Sidebar Labels</div>
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><span class="si-icon">🏠</span><span class="si-label">Dashboard</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">📅</span><span class="si-label">Compliance Calendar</span><span class="si-screen">calendar</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Contacts</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🏢</span><span class="si-label">Business Clients</span><span class="si-screen">companies</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🗂️</span><span class="si-label">Client Documents</span><span class="si-screen">documents</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">💰</span><span class="si-label">Billing &amp; Invoices</span><span class="si-screen">invoices</span></li>
+          <li class="sidebar-item"><span class="si-icon">📋</span><span class="si-label">Templates</span></li>
+          <li class="sidebar-item"><span class="si-icon">✅</span><span class="si-label">Tasks</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Employees</span></li>
+          <li class="sidebar-item"><span class="si-icon">💵</span><span class="si-label">Pay Structures</span></li>
+          <li class="sidebar-item si-hidden"><span class="si-icon">🎯</span><span class="si-label">New Clients (Pipeline)</span></li>
+        </ul>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Pipeline: New Client Pipeline</div>
+        <div class="pipeline-meta">
+          <div class="pm-row"><span class="pm-key">Card Label</span><span class="pm-val">Engagement</span></div>
+          <div class="pm-row"><span class="pm-key">Value Label</span><span class="pm-val">Annual Fee</span></div>
+          <div class="pm-row"><span class="pm-key">Won Label</span><span class="pm-val">On-Boarded</span></div>
+          <div class="pm-row"><span class="pm-key">Lost Label</span><span class="pm-val">Not Proceeded</span></div>
+          <div class="pm-row"><span class="pm-key">Note</span><span class="pm-val" style="color:var(--warning);">Pipeline hidden by default</span></div>
+        </div>
+        <div class="stage-list">
+          <div class="stage-item"><div class="stage-dot" style="background:#9AABB8"></div><span class="stage-label">Enquiry</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F0A843"></div><span class="stage-label">Scope Meeting</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#4A8FFF"></div><span class="stage-label">Quote / Proposal Sent</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#B57BFF"></div><span class="stage-label">Engagement Letter Sent</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD68C"></div><span class="stage-label">Client On-Boarded</span><span class="stage-badge badge-won">Won</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F07070"></div><span class="stage-label">Not Proceeded</span><span class="stage-badge badge-lost">Lost</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Label Overrides</div>
+        <table class="label-table">
+          <tr><td class="lk">Deal singular</td><td class="lv">Engagement</td></tr>
+          <tr><td class="lk">Company label</td><td class="lv">Business Client</td></tr>
+          <tr><td class="lk">Documents</td><td class="lv">Client Documents</td></tr>
+          <tr><td class="lk">Invoices</td><td class="lv">Billing &amp; Invoices</td></tr>
+          <tr><td class="lk">Calendar</td><td class="lv">Compliance Calendar</td></tr>
+        </table>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Features</div>
+        <div class="feature-grid">
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Contacts</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Companies</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Calendar</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Documents</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Invoicing</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Templates</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Tasks</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>WhatsApp</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Email Composer</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Relationship Score</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Pipeline (hidden)</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Financial</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Starter Templates</div>
+        <div class="tpl-list">
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Tax Season Kick-Off — Documents We Need</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Deadline Reminder — Document Due in 14 Days</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Financial Statements Ready for Review</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Provisional Tax — Payment Due &amp; Amount</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Engagement Letter &amp; Fee Proposal</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Missing Documents Follow-Up (Friendly Nudge)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PROFILE 6 — RECRUITMENT
+══════════════════════════════════════════════════════════════ -->
+<div class="section-divider"><h2>Profile 6 — Recruitment &amp; Staffing</h2></div>
+<div class="profile-card">
+  <div class="profile-card-inner">
+    <div class="profile-head">
+      <div class="profile-icon ic-recruitment">🤝</div>
+      <div class="profile-meta">
+        <h3>Recruitment &amp; Staffing</h3>
+        <div class="tagline">Candidate placement &amp; vacancy management</div>
+        <div class="profile-tags">
+          <span class="tag tag-key">recruitment</span>
+          <span class="tag tag-industry">Professional Services</span>
+          <span class="tag tag-both">B2C + B2B</span>
+          <span class="tag tag-inv-yes">Invoicing On</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="profile-col">
+        <div class="col-title">Sidebar Labels</div>
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><span class="si-icon">🏠</span><span class="si-label">Dashboard</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🎯</span><span class="si-label">Active Vacancies</span><span class="si-screen">pipeline</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🏢</span><span class="si-label">Client Companies</span><span class="si-screen">companies</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">👤</span><span class="si-label">Candidates</span><span class="si-screen">contacts</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">📅</span><span class="si-label">Interview Calendar</span><span class="si-screen">calendar</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🗂️</span><span class="si-label">CVs &amp; Agreements</span><span class="si-screen">documents</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">💰</span><span class="si-label">Placement Invoices</span><span class="si-screen">invoices</span></li>
+          <li class="sidebar-item"><span class="si-icon">📋</span><span class="si-label">Templates</span></li>
+          <li class="sidebar-item"><span class="si-icon">✅</span><span class="si-label">Tasks</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Employees</span></li>
+          <li class="sidebar-item"><span class="si-icon">💵</span><span class="si-label">Pay Structures</span></li>
+        </ul>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Pipeline: Active Vacancies</div>
+        <div class="pipeline-meta">
+          <div class="pm-row"><span class="pm-key">Card Label</span><span class="pm-val">Vacancy</span></div>
+          <div class="pm-row"><span class="pm-key">Value Label</span><span class="pm-val">Placement Fee</span></div>
+          <div class="pm-row"><span class="pm-key">Won Label</span><span class="pm-val">Placed</span></div>
+          <div class="pm-row"><span class="pm-key">Lost Label</span><span class="pm-val">Vacancy Closed</span></div>
+        </div>
+        <div class="stage-list">
+          <div class="stage-item"><div class="stage-dot" style="background:#9AABB8"></div><span class="stage-label">Vacancy Briefed</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F0A843"></div><span class="stage-label">Candidates Sourcing</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#4A8FFF"></div><span class="stage-label">CVs Submitted to Client</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#B57BFF"></div><span class="stage-label">Interviews Underway</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#FF7BBB"></div><span class="stage-label">Offer Stage</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD68C"></div><span class="stage-label">Placement Made</span><span class="stage-badge badge-won">Won</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F07070"></div><span class="stage-label">Vacancy Closed</span><span class="stage-badge badge-lost">Lost</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Label Overrides</div>
+        <table class="label-table">
+          <tr><td class="lk">Deal singular</td><td class="lv">Vacancy</td></tr>
+          <tr><td class="lk">Contact label</td><td class="lv">Candidate</td></tr>
+          <tr><td class="lk">Company label</td><td class="lv">Client Company</td></tr>
+          <tr><td class="lk">Documents</td><td class="lv">CVs &amp; Agreements</td></tr>
+          <tr><td class="lk">Add deal button</td><td class="lv">New Vacancy</td></tr>
+        </table>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Features</div>
+        <div class="feature-grid">
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Contacts</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Companies</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Pipeline</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Calendar</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Documents</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Invoicing</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Templates</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Tasks</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>WhatsApp</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Email Composer</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Relationship Score</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Financial</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Starter Templates</div>
+        <div class="tpl-list">
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Candidate Introduction — Vacancy Match</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">CV Submission to Client — Shortlist for [Role]</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Interview Prep — What to Expect</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Offer Received — Let's Talk Through the Details</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Placement Confirmation — Congratulations</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">3-Month Check-In — How's the New Role Going?</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Client Update — Vacancy Briefing Acknowledgement</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PROFILE 7 — SOLAR
+══════════════════════════════════════════════════════════════ -->
+<div class="section-divider"><h2>Profile 7 — Solar &amp; Energy Installer</h2></div>
+<div class="profile-card">
+  <div class="profile-card-inner">
+    <div class="profile-head">
+      <div class="profile-icon ic-solar">☀️</div>
+      <div class="profile-meta">
+        <h3>Solar &amp; Energy Installer</h3>
+        <div class="tagline">Residential &amp; commercial solar installation management</div>
+        <div class="profile-tags">
+          <span class="tag tag-key">solar</span>
+          <span class="tag tag-industry">Energy</span>
+          <span class="tag tag-both">B2C + B2B</span>
+          <span class="tag tag-inv-yes">Invoicing On</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="profile-col">
+        <div class="col-title">Sidebar Labels</div>
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><span class="si-icon">🏠</span><span class="si-label">Dashboard</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🔆</span><span class="si-label">Installation Pipeline</span><span class="si-screen">pipeline</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">👥</span><span class="si-label">Clients &amp; Leads</span><span class="si-screen">contacts</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">📅</span><span class="si-label">Site Calendar</span><span class="si-screen">calendar</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🗂️</span><span class="si-label">Installation Files</span><span class="si-screen">documents</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">💰</span><span class="si-label">Invoices &amp; Deposits</span><span class="si-screen">invoices</span></li>
+          <li class="sidebar-item"><span class="si-icon">📋</span><span class="si-label">Templates</span></li>
+          <li class="sidebar-item"><span class="si-icon">✅</span><span class="si-label">Tasks</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Employees</span></li>
+          <li class="sidebar-item"><span class="si-icon">💵</span><span class="si-label">Pay Structures</span></li>
+          <li class="sidebar-item si-hidden"><span class="si-icon">🏢</span><span class="si-label">Commercial Clients</span></li>
+        </ul>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Pipeline: Installation Pipeline</div>
+        <div class="pipeline-meta">
+          <div class="pm-row"><span class="pm-key">Card Label</span><span class="pm-val">Installation</span></div>
+          <div class="pm-row"><span class="pm-key">Value Label</span><span class="pm-val">System Value (R)</span></div>
+          <div class="pm-row"><span class="pm-key">Won Label</span><span class="pm-val">COC Issued</span></div>
+          <div class="pm-row"><span class="pm-key">Lost Label</span><span class="pm-val">Lost to Competitor</span></div>
+        </div>
+        <div class="stage-list">
+          <div class="stage-item"><div class="stage-dot" style="background:#9AABB8"></div><span class="stage-label">Lead / Enquiry</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F0A843"></div><span class="stage-label">Site Survey Booked</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#4A8FFF"></div><span class="stage-label">Proposal Sent</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#B57BFF"></div><span class="stage-label">Deposit Received</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F0A843"></div><span class="stage-label">Installation Scheduled</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD6C8"></div><span class="stage-label">Installation Complete</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD68C"></div><span class="stage-label">COC Issued</span><span class="stage-badge badge-won">Won</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F07070"></div><span class="stage-label">Lost to Competitor</span><span class="stage-badge badge-lost">Lost</span></div>
+        </div>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Features</div>
+        <div class="feature-grid">
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Contacts</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Pipeline</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Calendar</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Documents</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Invoicing</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Templates</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Tasks</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>WhatsApp</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Email Composer</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Relationship Score</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Companies</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Financial</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Starter Templates</div>
+        <div class="tpl-list">
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Site Survey Confirmation</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Solar Proposal — System Design &amp; Pricing</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Proposal Follow-Up — Any Questions?</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Deposit Invoice &amp; Installation Timeline</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Installation Day Reminder — Team Arriving</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">COC Issued — Your System is On Grid</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Annual Maintenance Reminder</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Referral Request — Know Anyone Needing Solar?</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PROFILE 8 — TRADES
+══════════════════════════════════════════════════════════════ -->
+<div class="section-divider"><h2>Profile 8 — Trades &amp; Field Services</h2></div>
+<div class="profile-card">
+  <div class="profile-card-inner">
+    <div class="profile-head">
+      <div class="profile-icon ic-trades">🔧</div>
+      <div class="profile-meta">
+        <h3>Trades &amp; Field Services</h3>
+        <div class="tagline">Plumbing, electrical, HVAC &amp; maintenance services</div>
+        <div class="profile-tags">
+          <span class="tag tag-key">trades</span>
+          <span class="tag tag-industry">Trades</span>
+          <span class="tag tag-both">B2C + B2B</span>
+          <span class="tag tag-inv-yes">Invoicing On</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="profile-col">
+        <div class="col-title">Sidebar Labels</div>
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><span class="si-icon">🏠</span><span class="si-label">Dashboard</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🔧</span><span class="si-label">Jobs Pipeline</span><span class="si-screen">pipeline</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">👥</span><span class="si-label">Clients &amp; Leads</span><span class="si-screen">contacts</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">📅</span><span class="si-label">Job Schedule</span><span class="si-screen">calendar</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">🗂️</span><span class="si-label">Job Documents</span><span class="si-screen">documents</span></li>
+          <li class="sidebar-item si-renamed"><span class="si-icon">💰</span><span class="si-label">Invoices &amp; Quotes</span><span class="si-screen">invoices</span></li>
+          <li class="sidebar-item"><span class="si-icon">📋</span><span class="si-label">Templates</span></li>
+          <li class="sidebar-item"><span class="si-icon">✅</span><span class="si-label">Tasks</span></li>
+          <li class="sidebar-item"><span class="si-icon">👥</span><span class="si-label">Employees</span></li>
+          <li class="sidebar-item"><span class="si-icon">💵</span><span class="si-label">Pay Structures</span></li>
+          <li class="sidebar-item si-hidden"><span class="si-icon">🏢</span><span class="si-label">Commercial Clients</span></li>
+        </ul>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Pipeline: Jobs Pipeline</div>
+        <div class="pipeline-meta">
+          <div class="pm-row"><span class="pm-key">Card Label</span><span class="pm-val">Job</span></div>
+          <div class="pm-row"><span class="pm-key">Value Label</span><span class="pm-val">Job Value (R)</span></div>
+          <div class="pm-row"><span class="pm-key">Won Label</span><span class="pm-val">Job Complete</span></div>
+          <div class="pm-row"><span class="pm-key">Lost Label</span><span class="pm-val">Lost to Competitor</span></div>
+        </div>
+        <div class="stage-list">
+          <div class="stage-item"><div class="stage-dot" style="background:#9AABB8"></div><span class="stage-label">Enquiry / Call-out</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F0A843"></div><span class="stage-label">Site Visit Booked</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#4A8FFF"></div><span class="stage-label">Quote Sent</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#B57BFF"></div><span class="stage-label">Quote Accepted</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F0A843"></div><span class="stage-label">Job Scheduled</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD6C8"></div><span class="stage-label">In Progress</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#3DD68C"></div><span class="stage-label">Job Complete</span><span class="stage-badge badge-won">Won</span></div>
+          <div class="stage-item"><div class="stage-dot" style="background:#F07070"></div><span class="stage-label">Lost to Competitor</span><span class="stage-badge badge-lost">Lost</span></div>
+        </div>
+      </div>
+      <div class="profile-col">
+        <div class="col-title">Features</div>
+        <div class="feature-grid">
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Contacts</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Pipeline</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Calendar</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Documents</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Invoicing</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Templates</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Tasks</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>WhatsApp</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Email Composer</span></div>
+          <div class="feature-item"><div class="fi-dot fi-on"></div><span>Relationship Score</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Companies</span></div>
+          <div class="feature-item"><div class="fi-dot fi-off"></div><span class="fi-off-label">Financial</span></div>
+        </div>
+        <div class="col-title" style="margin-top:20px;">Starter Templates</div>
+        <div class="tpl-list">
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Site Visit Confirmation</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Quote / Estimate — Job Details &amp; Pricing</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Quote Follow-Up — Any Questions?</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Job Scheduled — Team Arriving on [Date]</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-email">Email</span><span class="tpl-name">Job Complete — Certificate &amp; Invoice</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Annual Maintenance Reminder</span></div>
+          <div class="tpl-item"><span class="tpl-ch tpl-wa">WA</span><span class="tpl-name">Referral Request — Happy With Our Work?</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     COMPOSITE PROFILES (INSURANCE ONLY)
+══════════════════════════════════════════════════════════════ -->
+<div class="section-divider" style="margin-top:56px;"><h2>Composite Profiles — Multi-Line Insurance</h2></div>
+<div class="composite-card">
+  <div class="composite-inner">
+    <h3>⭐ What Are Composite Profiles?</h3>
+    <p>
+      Insurance brokers often hold multiple lines of business — personal lines, life &amp; investments, and commercial.
+      When a tenant selects more than one insurance profile during onboarding, the system automatically builds a
+      <strong>composite merged config</strong> using <code>_buildCompositeConfig()</code>. This combines features,
+      sidebar items, and templates from all selected profiles into a single unified workspace.
+    </p>
+    <p>
+      <strong>Key composite rules:</strong><br>
+      • Features — if ANY selected profile enables a feature, the composite enables it.<br>
+      • Sidebar — union of all items; if a screen is visible in any profile, it stays visible in the composite.<br>
+      • Templates — all templates pooled (deduplicated by ID).<br>
+      • Pipeline — when all 3 insurance lines are selected, uses a unified 6-stage master pipeline named <strong>"Full-Service Broker Pipeline"</strong>.
+      When 2 lines are selected, the pipeline shows tab views per line.
+    </p>
+    <table class="composite-table">
+      <thead>
+        <tr>
+          <th>Combination</th>
+          <th>Profile Key (stored in localStorage)</th>
+          <th>Composite Name</th>
+          <th>Pipeline Name</th>
+          <th>Invoicing?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="combo"><span class="combo-tag">personal_lines</span><span class="combo-tag">life_invest</span></div></td>
+          <td><code class="key-code">personal_lines,life_invest</code></td>
+          <td>Personal Lines Broker + Life &amp; Investments Broker</td>
+          <td>Renewals Tracker · Opportunities</td>
+          <td style="color:var(--danger);">No</td>
+        </tr>
+        <tr>
+          <td><div class="combo"><span class="combo-tag">personal_lines</span><span class="combo-tag">commercial</span></div></td>
+          <td><code class="key-code">personal_lines,commercial</code></td>
+          <td>Personal Lines Broker + Commercial Lines Broker</td>
+          <td>Renewals Tracker · Commercial Pipeline</td>
+          <td style="color:var(--danger);">No</td>
+        </tr>
+        <tr>
+          <td><div class="combo"><span class="combo-tag">life_invest</span><span class="combo-tag">commercial</span></div></td>
+          <td><code class="key-code">life_invest,commercial</code></td>
+          <td>Life &amp; Investments Broker + Commercial Lines Broker</td>
+          <td>Opportunities · Commercial Pipeline</td>
+          <td style="color:var(--danger);">No</td>
+        </tr>
+        <tr>
+          <td><div class="combo"><span class="combo-tag">personal_lines</span><span class="combo-tag">life_invest</span><span class="combo-tag">commercial</span></div></td>
+          <td><code class="key-code">personal_lines,life_invest,commercial</code></td>
+          <td>⭐ Full-Service Insurance Broker</td>
+          <td><strong>Full-Service Broker Pipeline</strong></td>
+          <td style="color:var(--danger);">No</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout" style="margin-top:20px;">
+      <strong>How to identify a composite tenant:</strong><br>
+      Check <code>localStorage.getItem('novatrai_profile')</code> in the browser console. A comma-separated value
+      (e.g. <code>personal_lines,life_invest</code>) indicates a composite. A single value (e.g. <code>personal_lines</code>)
+      indicates a single-profile tenant. The composite key is also reflected in <code>document.body.dataset.profile</code>.
+    </div>
+  </div>
+</div>
+
+
+<!-- ── FOOTER ── -->
+<div class="doc-footer">
+  <span>Novatrai Platform — Super Admin Reference · Industry Profile System</span>
+  <span>Source: <code>js/admin.js → _novatraiProfileConfig</code> &amp; <code>_buildCompositeConfig()</code></span>
+</div>
+
+<script>if(window.self!==window.top)document.body.classList.add('embedded');</script>
+</body>
+</html>

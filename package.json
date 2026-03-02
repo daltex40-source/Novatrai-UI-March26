@@ -1,0 +1,11 @@
+{
+  "name": "novatrai-ui-march26",
+  "version": "1.0.0",
+  "description": "Novatrai UI — March 2026 Build",
+  "scripts": {
+    "dev": "npx serve . -l 5173"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

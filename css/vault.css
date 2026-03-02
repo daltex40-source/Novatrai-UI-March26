@@ -1,0 +1,69 @@
+/* ── Vault card / list view ── */
+.vault-card { background:#141A22; border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:pointer; transition:box-shadow .15s,border-color .15s; }
+.vault-card:hover { box-shadow:var(--shadow-md); border-color:rgba(74,143,255,0.3); }
+.vault-card.selected { border-color:var(--accent); box-shadow:0 0 0 2px rgba(108,71,255,.25); }
+.vault-thumb { height:110px; background:#0C1117; }
+.vault-card-body { padding:10px 12px 12px; }
+.vault-card-name { font-size:12px; font-weight:600; color:#E4EBF5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:3px; }
+.vault-card-meta { font-size:10px; color:#5A7080; margin-bottom:8px; }
+.vault-card-actions { display:flex; gap:4px; }
+.vault-list { display:flex; flex-direction:column; gap:6px; padding:16px; }
+.vault-list-row { display:flex; align-items:center; gap:12px; padding:10px 14px; background:#141A22; border:1px solid var(--border); border-radius:10px; cursor:pointer; transition:border-color .15s; }
+.vault-list-row:hover { border-color:rgba(74,143,255,0.3); }
+.vault-list-row.selected { border-color:var(--accent); background:rgba(108,71,255,.04); }
+
+/* ── Master docs signed badge ── */
+.signed-badge { display:inline-flex; align-items:center; font-size:10px; font-weight:600; padding:2px 7px; border-radius:20px; margin-left:8px; background:rgba(16,185,129,.15); color:#10b981; border:1px solid rgba(16,185,129,.3); }
+.pending-sig-badge { background:rgba(245,158,11,.15); color:#f59e0b; border-color:rgba(245,158,11,.3); }
+.signed-tag { color:#10b981 !important; border-color:rgba(16,185,129,.3) !important; }
+.company-tag { color:#60a5fa !important; border-color:rgba(96,165,250,.3) !important; }
+
+/* ── Pack builder ── */
+.pb-drop-zone { flex:1; background:#0C1117; border:1.5px dashed var(--border); border-radius:10px; min-height:220px; padding:10px; overflow-y:auto; }
+.pb-doc-item { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; cursor:pointer; font-size:12px; color:#E4EBF5; transition:background .12s; }
+.pb-doc-item:hover { background:#141A22; }
+.pb-doc-fmt { font-size:9px; font-weight:700; padding:2px 5px; border-radius:4px; text-transform:uppercase; }
+.pb-doc-fmt.docx { background:rgba(59,130,246,.15); color:#3b82f6; }
+.pb-doc-fmt.pdf  { background:rgba(239,68,68,.15);  color:#ef4444; }
+
+/* ── mdoc row icon variants ── */
+.mdoc-row-icon.docx { background:rgba(59,130,246,.12); color:#3b82f6; }
+.mdoc-row-icon.pdf  { background:rgba(239,68,68,.12);  color:#ef4444; }
+.mdoc-row-icon.pack { background:rgba(108,71,255,.12); color:#6c47ff; }
+.mdoc-row-icon.signed { background:rgba(16,185,129,.12); color:#10b981; }
+
+/* afv-overlay uses CSS class .open for opacity transition */
+
+/* ── Composer attach badge ── */
+.msg-attach-badge { position:absolute; top:-5px; right:-5px; background:var(--accent); color:#fff; border-radius:50%; width:16px; height:16px; font-size:9px; font-weight:700; align-items:center; justify-content:center; }
+/* ── Master Doc section headers ── */
+.mdoc-section { margin-bottom: 8px; }
+.mdoc-section-hdr { display:flex; align-items:center; gap:10px; padding:10px 16px 8px; border-bottom:1px solid var(--border); margin-bottom:4px; }
+.mdoc-section-title { font-size:13px; font-weight:700; color:#E4EBF5; }
+.mdoc-section-count { font-size:11px; color:#5A7080; }
+
+/* ── Master Doc row tags ── */
+.mdoc-row-tags { display:flex; flex-wrap:wrap; gap:4px; flex-shrink:0; }
+
+/* ── Master Doc action buttons ── */
+.mdoc-action-btn { background:#1B2230; border:1px solid var(--border); border-radius:6px; color:#9AABB8; font-size:11px; font-weight:500; padding:4px 9px; cursor:pointer; transition:all .12s; white-space:nowrap; }
+.mdoc-action-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+/* ── Master Doc tags ── */
+.mdoc-tag { display:inline-flex; align-items:center; font-size:10px; font-weight:500; padding:2px 7px; border-radius:20px; background:rgba(108,71,255,.1); color:var(--accent); border:1px solid rgba(108,71,255,.2); white-space:nowrap; }
+
+/* ── AFV source buttons ── */
+.afv-src-btn { display:flex; align-items:center; gap:6px; padding:7px 14px; border:1px solid var(--border); border-radius:8px; background:#141A22; color:#9AABB8; font-size:12px; font-weight:500; cursor:pointer; transition:all .14s; white-space:nowrap; }
+.afv-src-btn:hover { border-color:rgba(74,143,255,0.3); color:var(--accent); }
+.afv-src-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+/* ── Pack Builder columns ── */
+.pack-builder-col { display:flex; flex-direction:column; flex:1; min-width:0; }
+.pack-builder-hdr { font-size:12px; font-weight:700; color:#E4EBF5; padding-bottom:8px; border-bottom:1px solid var(--border); margin-bottom:10px; }
+
+/* ── AFV toolbar ── */
+.afv-toolbar { display:flex; align-items:center; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+
+/* ── AFV item check overlay ── */
+.afv-item-check { position:absolute; top:6px; right:6px; width:20px; height:20px; background:var(--accent); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; }
+.afv-item { position:relative; }

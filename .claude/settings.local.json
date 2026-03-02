@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat -ano)",
+      "Bash(node server.js)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/api)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H \"content-type: application/json\" -d '{\"\"tenant_slug\"\":\"\"demo\"\",\"\"email\"\":\"\"admin@demo.novatrai.com\"\",\"\"password\"\":\"\"Password123!\"\"}')",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H \"Content-Type: application/json\" --data-raw \"{\"\"tenant_slug\"\":\"\"demo\"\",\"\"email\"\":\"\"admin@demo.novatrai.com\"\",\"\"password\"\":\"\"Password123!\"\"}\")",
+      "Bash(npx prisma db seed)",
+      "Bash(node -e \"const d=require\\(''C:/Users/User/login.json''\\); console.log\\(d.data.access_token\\)\")",
+      "Bash(node test/verify-tasks.js)",
+      "Bash(node test/debug-tasks.js)",
+      "Bash(taskkill /f /im node.exe)",
+      "Bash(taskkill //f //im node.exe)",
+      "Bash(curl -s http://localhost:3000/api/health)",
+      "Bash(node test/verify-tasks-full.js)",
+      "Bash(npm ls pg)",
+      "Bash(node -e \":*)",
+      "Bash(node test/verify-approvals-full.js)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(pushd \"/c/Developer/Novatrai BOS backend/novatrai-bos-backend\")",
+      "Bash(npx nest build)",
+      "Bash(\"/c/Developer/Novatrai BOS backend/novatrai-bos-backend/node_modules/.bin/tsc\" --noEmit --project \"/c/Developer/Novatrai BOS backend/novatrai-bos-backend/tsconfig.json\")",
+      "Bash(node -c js/pipeline-board.js)",
+      "Bash(node -c js/demo-data.js)",
+      "Bash(node -c js/api-wire.js)",
+      "Bash(node -c js/app.js)"
+    ]
+  }
+}
