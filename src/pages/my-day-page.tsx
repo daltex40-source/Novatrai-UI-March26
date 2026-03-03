@@ -49,7 +49,7 @@ export function MyDayPage() {
                 <p className="font-medium">{task.title}</p>
                 <div className="mt-1 flex items-center justify-between">
                   <p className="text-xs text-muted-foreground">Due {task.dueDate || "Not set"}</p>
-                  <StatusPill status={task.status} />
+                  <StatusPill kind="task" value={task.status} />
                 </div>
               </div>
             ))}
@@ -65,7 +65,7 @@ export function MyDayPage() {
                 <p className="font-medium">{approval.title}</p>
                 <div className="mt-1 flex items-center justify-between">
                   <p className="text-xs text-muted-foreground">{approval.requester}</p>
-                  <StatusPill status={approval.status} />
+                  <StatusPill kind="approval" value={approval.status} />
                 </div>
               </div>
             ))}
@@ -81,9 +81,7 @@ export function MyDayPage() {
             <div key={item.id} className="rounded-md border p-3 text-sm">
               <p className="font-medium">{item.title}</p>
               <p className="mt-1 text-xs text-muted-foreground">{item.accountName}</p>
-              <div className="mt-2">
-                <StatusPill status={item.status} />
-              </div>
+              <div className="mt-2"><StatusPill kind="case" value={item.status} /></div>
             </div>
           ))}
         </div>

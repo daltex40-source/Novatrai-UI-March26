@@ -59,31 +59,18 @@ export function TasksPage() {
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td className="px-4 py-5 text-muted-foreground" colSpan={4}>
-                  Loading tasks...
-                </td>
-              </tr>
+              <tr><td className="px-4 py-5 text-muted-foreground" colSpan={4}>Loading tasks...</td></tr>
             ) : null}
             {!loading && tasks.length === 0 ? (
-              <tr>
-                <td className="px-4 py-5 text-muted-foreground" colSpan={4}>
-                  No tasks found.
-                </td>
-              </tr>
+              <tr><td className="px-4 py-5 text-muted-foreground" colSpan={4}>No tasks found.</td></tr>
             ) : null}
             {tasks.map((task) => (
               <tr key={task.id} className="border-b last:border-b-0">
                 <td className="px-4 py-3 font-medium">{task.title}</td>
                 <td className="px-4 py-3">{task.dueDate}</td>
-                <td className="px-4 py-3"><StatusPill status={task.status} /></td>
+                <td className="px-4 py-3"><StatusPill kind="task" value={task.status} /></td>
                 <td className="px-4 py-3">
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => void onCompleteTask(task.id)}
-                    disabled={task.status === "COMPLETED" || busyTaskId === task.id}
-                  >
+                  <Button size="sm" variant="secondary" onClick={() => void onCompleteTask(task.id)} disabled={task.status === "COMPLETED" || busyTaskId === task.id}>
                     {busyTaskId === task.id ? "Saving..." : "Complete"}
                   </Button>
                 </td>

@@ -59,39 +59,21 @@ export function ApprovalsPage() {
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td className="px-4 py-5 text-muted-foreground" colSpan={4}>
-                  Loading approvals...
-                </td>
-              </tr>
+              <tr><td className="px-4 py-5 text-muted-foreground" colSpan={4}>Loading approvals...</td></tr>
             ) : null}
             {!loading && approvals.length === 0 ? (
-              <tr>
-                <td className="px-4 py-5 text-muted-foreground" colSpan={4}>
-                  No approvals found.
-                </td>
-              </tr>
+              <tr><td className="px-4 py-5 text-muted-foreground" colSpan={4}>No approvals found.</td></tr>
             ) : null}
             {approvals.map((approval) => (
               <tr key={approval.id} className="border-b last:border-b-0">
                 <td className="px-4 py-3 font-medium">{approval.title}</td>
                 <td className="px-4 py-3">{approval.requester}</td>
-                <td className="px-4 py-3"><StatusPill status={approval.status} /></td>
+                <td className="px-4 py-3"><StatusPill kind="approval" value={approval.status} /></td>
                 <td className="flex gap-2 px-4 py-3">
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => void decide(approval.id, "APPROVED")}
-                    disabled={busyApprovalId === approval.id || approval.status !== "PENDING"}
-                  >
+                  <Button size="sm" variant="secondary" onClick={() => void decide(approval.id, "APPROVED")} disabled={busyApprovalId === approval.id || approval.status !== "PENDING"}>
                     {busyApprovalId === approval.id ? "Saving..." : "Approve"}
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => void decide(approval.id, "REJECTED")}
-                    disabled={busyApprovalId === approval.id || approval.status !== "PENDING"}
-                  >
+                  <Button size="sm" variant="ghost" onClick={() => void decide(approval.id, "REJECTED")} disabled={busyApprovalId === approval.id || approval.status !== "PENDING"}>
                     Reject
                   </Button>
                 </td>

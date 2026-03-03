@@ -1,61 +1,71 @@
-import { ReactNode } from "react";
-import { StatusPill } from "@/components/shared/status-pill";
+import type { ReactNode } from "react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LifecycleBanner } from "./lifecycle-banner";
 
-type ObjectDrawerProps = {
+type ObjectDrawerShellProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
-  status: string;
-  lifecycleSteps: string[];
-  currentStatus: string;
+  subtitle?: string;
+  statusNode: ReactNode;
+  lifecycleNode: ReactNode;
   primaryAction?: ReactNode;
+  secondaryActions?: ReactNode;
   overview: ReactNode;
   timeline: ReactNode;
   linked: ReactNode;
-  financial?: ReactNode;
+  activity: ReactNode;
+  tabLabels?: {
+    overview?: string;
+    timeline?: string;
+    linked?: string;
+    activity?: string;
+  };
 };
 
 export function ObjectDrawer({
   open,
   onOpenChange,
   title,
-  status,
-  lifecycleSteps,
-  currentStatus,
+  subtitle,
+  statusNode,
+  lifecycleNode,
   primaryAction,
+  secondaryActions,
   overview,
   timeline,
   linked,
-  financial,
-}: ObjectDrawerProps) {
+  activity,
+  tabLabels,
+}: ObjectDrawerShellProps) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="flex h-full flex-col">
-        <div className="space-y-4 border-b pb-4 pr-8">
+      <SheetContent className="flex h-full flex-col p-0">
+        <div className="sticky top-0 z-10 border-b bg-gradient-to-b from-white to-slate-50 px-6 py-5 pr-12">
           <div className="flex items-start justify-between gap-4">
-            <div className="space-y-2">
-              <h2 className="text-lg font-semibold">{title}</h2>
-              <StatusPill status={status} />
+            <div className="space-y-1.5">
+              <h2 className="text-xl font-semibold leading-tight">{title}</h2>
+              {subtitle ? <p className="text-xs uppercase tracking-wide text-muted-foreground">{subtitle}</p> : null}
+              <div>{statusNode}</div>
             </div>
-            {primaryAction}
+            <div className="flex items-center gap-2">{primaryAction}</div>
           </div>
-          <LifecycleBanner steps={lifecycleSteps} currentStatus={currentStatus} />
+          <div className="mt-4">{lifecycleNode}</div>
+          {secondaryActions ? <div className="mt-3 flex flex-wrap items-center gap-2">{secondaryActions}</div> : null}
         </div>
-        <Tabs defaultValue="overview" className="mt-4 flex min-h-0 flex-1 flex-col">
-          <TabsList className="w-full justify-start">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="timeline">Timeline</TabsTrigger>
-            <TabsTrigger value="linked">Linked</TabsTrigger>
-            {financial ? <TabsTrigger value="financial">Financial</TabsTrigger> : null}
+
+        <Tabs defaultValue="overview" className="flex min-h-0 flex-1 flex-col px-6 pb-6 pt-2">
+          <TabsList className="mt-4 w-full justify-start">
+            <TabsTrigger value="overview">{tabLabels?.overview ?? "Overview"}</TabsTrigger>
+            <TabsTrigger value="timeline">{tabLabels?.timeline ?? "Timeline"}</TabsTrigger>
+            <TabsTrigger value="linked">{tabLabels?.linked ?? "Linked"}</TabsTrigger>
+            <TabsTrigger value="activity">{tabLabels?.activity ?? "Activity"}</TabsTrigger>
           </TabsList>
-          <div className="min-h-0 flex-1 overflow-y-auto pr-2">
+          <div className="mt-4 min-h-0 flex-1 overflow-y-auto pr-1">
             <TabsContent value="overview">{overview}</TabsContent>
             <TabsContent value="timeline">{timeline}</TabsContent>
             <TabsContent value="linked">{linked}</TabsContent>
-            {financial ? <TabsContent value="financial">{financial}</TabsContent> : null}
+            <TabsContent value="activity">{activity}</TabsContent>
           </div>
         </Tabs>
       </SheetContent>

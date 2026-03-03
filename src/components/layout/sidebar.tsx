@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { LayoutDashboard, CalendarCheck2, GitBranch, Briefcase, CheckSquare, ShieldCheck, FileText, Wallet, Bot } from "lucide-react";
+import { LayoutDashboard, CalendarCheck2, GitBranch, Briefcase, CheckSquare, ShieldCheck, FileText, Wallet, Bot, Building2 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +23,7 @@ const items: SidebarItem[] = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
   { label: "My Day", href: "/my-day", icon: CalendarCheck2 },
   { label: "Pipeline", href: "/pipeline", icon: GitBranch, badgeKey: "atRiskDeals" },
+  { label: "Companies", href: "/companies", icon: Building2 },
   { label: "Cases", href: "/cases", icon: Briefcase },
   { label: "Tasks", href: "/tasks", icon: CheckSquare, badgeKey: "overdueTasks" },
   { label: "Approvals", href: "/approvals", icon: ShieldCheck, badgeKey: "pendingApprovals" },
