@@ -10,6 +10,7 @@ import { MyDayPage } from "@/pages/my-day-page";
 import { PipelinePage } from "@/pages/pipeline-page";
 import { TasksPage } from "@/pages/tasks-page";
 import { AutomationsPage } from "@/pages/automations-page";
+import { AnalyticsPage } from "@/pages/analytics-page";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/approvals" element={<ApprovalsPage />} />
         <Route path="/documents" element={<DocumentsPage />} />
         <Route path="/finance" element={<FinancePage />} />
+        <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/automations" element={<AutomationsPage />} />
       </Routes>
     </AppLayout>

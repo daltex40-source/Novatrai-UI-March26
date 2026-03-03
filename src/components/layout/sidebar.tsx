@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { LayoutDashboard, CalendarCheck2, GitBranch, Briefcase, CheckSquare, ShieldCheck, FileText, Wallet, Bot, Building2 } from "lucide-react";
+import { LayoutDashboard, CalendarCheck2, GitBranch, Briefcase, CheckSquare, ShieldCheck, FileText, Wallet, Bot, Building2, LineChart } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +21,7 @@ type SidebarProps = {
 
 const items: SidebarItem[] = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
+  { label: "Analytics", href: "/analytics", icon: LineChart },
   { label: "My Day", href: "/my-day", icon: CalendarCheck2 },
   { label: "Pipeline", href: "/pipeline", icon: GitBranch, badgeKey: "atRiskDeals" },
   { label: "Companies", href: "/companies", icon: Building2 },
