@@ -1,5 +1,5 @@
 import { Building2, Plus } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { createCompany, type Company } from "@/api/companies";
@@ -68,6 +68,7 @@ function extractItems(payload: unknown): unknown[] {
 export function GlobalCreateEntry() {
   const navigate = useNavigate();
   const { caseId: caseContextId, openCase, openDeal, openCompany } = useObjectDrawers();
+  const createButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const [createType, setCreateType] = useState<CreateType | null>(null);
   const [commandOpen, setCommandOpen] = useState(false);
@@ -226,6 +227,7 @@ export function GlobalCreateEntry() {
     toast.success(message);
     closeDialogs();
     setCommandOpen(false);
+    window.requestAnimationFrame(() => createButtonRef.current?.focus());
   };
 
   const notWired = () => {
@@ -361,6 +363,11 @@ export function GlobalCreateEntry() {
     if (type === "Company") openCompany(id);
   };
 
+  const restoreCreateButtonFocus = (event: Event) => {
+    event.preventDefault();
+    createButtonRef.current?.focus();
+  };
+
   const handleSelectSearchResult = (item: SearchResultItem) => {
     setCommandOpen(false);
     if (item.type === "Case") openCase(item.id);
@@ -373,7 +380,7 @@ export function GlobalCreateEntry() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="sm" variant="secondary" className="gap-2">
+          <Button ref={createButtonRef} size="sm" variant="secondary" className="gap-2">
             <Plus className="h-4 w-4" />
             Create
             <Badge variant="muted" className="ml-1 text-[10px]">⌘K</Badge>
@@ -393,7 +400,7 @@ export function GlobalCreateEntry() {
       </DropdownMenu>
 
       <Dialog open={commandOpen} onOpenChange={setCommandOpen}>
-        <DialogContent className="max-w-2xl p-0">
+        <DialogContent className="max-w-2xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
           <Command shouldFilter>
             <CommandInput placeholder="Type a command or search..." value={commandQuery} onValueChange={setCommandQuery} />
             <CommandList>
@@ -448,7 +455,7 @@ export function GlobalCreateEntry() {
       </Dialog>
 
       <Dialog open={createType === "deal"} onOpenChange={(open) => !open && closeDialogs()}>
-        <DialogContent className="max-w-xl p-0">
+        <DialogContent className="max-w-xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader className="rounded-t-lg border-b bg-slate-50 px-6 py-5">
             <DialogTitle>New Deal</DialogTitle>
             <DialogDescription>Capture the opportunity with only essential fields.</DialogDescription>
@@ -505,7 +512,7 @@ export function GlobalCreateEntry() {
       </Dialog>
 
       <Dialog open={createType === "case"} onOpenChange={(open) => !open && closeDialogs()}>
-        <DialogContent className="max-w-xl p-0">
+        <DialogContent className="max-w-xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader className="rounded-t-lg border-b bg-slate-50 px-6 py-5">
             <DialogTitle>New Case</DialogTitle>
             <DialogDescription>Open a new execution case quickly.</DialogDescription>
@@ -559,7 +566,7 @@ export function GlobalCreateEntry() {
       </Dialog>
 
       <Dialog open={createType === "task"} onOpenChange={(open) => !open && closeDialogs()}>
-        <DialogContent>
+        <DialogContent onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader>
             <DialogTitle>New Task</DialogTitle>
             <DialogDescription>Fast task capture with optional case link.</DialogDescription>
@@ -575,34 +582,56 @@ export function GlobalCreateEntry() {
       </Dialog>
 
       <Dialog open={createType === "invoice"} onOpenChange={(open) => !open && closeDialogs()}>
-        <DialogContent>
-          <DialogHeader>
+        <DialogContent className="max-w-xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
+          <DialogHeader className="rounded-t-lg border-b bg-slate-50 px-6 py-5">
             <DialogTitle>New Invoice Draft</DialogTitle>
             <DialogDescription>Create a draft and optionally link to a case.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-3 text-sm">
-            <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Client / Company (optional)" value={invoiceClient} onChange={(event) => setInvoiceClient(event.target.value)} />
-            <CompanyPicker
-              label="Company"
-              selected={selectedInvoiceCompany}
-              onSelect={(company) => {
-                setSelectedInvoiceCompany(company);
-                setInvoiceClient(company.name);
-              }}
-              onClear={() => setSelectedInvoiceCompany(null)}
-              onCreateCompany={() => setCreateType("company")}
-              onFreeTextChange={(value) => setInvoiceClient(value)}
-            />
-            <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Paste Case ID (optional)" value={invoiceCaseId} onChange={(event) => setInvoiceCaseId(event.target.value)} />
-            <p className="text-xs text-muted-foreground">Case search coming soon.</p>
-            <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Amount (optional)" value={invoiceAmount} onChange={(event) => setInvoiceAmount(event.target.value)} />
+          <div className="space-y-4 px-6 py-5 text-sm">
+            <div className="rounded-lg border bg-white p-4 shadow-sm">
+              <div className="space-y-3">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Client / Company</label>
+                  <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Client / Company (optional)" value={invoiceClient} onChange={(event) => setInvoiceClient(event.target.value)} />
+                </div>
+                <CompanyPicker
+                  label="Company"
+                  selected={selectedInvoiceCompany}
+                  onSelect={(company) => {
+                    setSelectedInvoiceCompany(company);
+                    setInvoiceClient(company.name);
+                  }}
+                  onClear={() => setSelectedInvoiceCompany(null)}
+                  onCreateCompany={() => setCreateType("company")}
+                  onFreeTextChange={(value) => setInvoiceClient(value)}
+                />
+              </div>
+            </div>
+            <div className="rounded-lg border bg-white p-4 shadow-sm">
+              <div className="space-y-3">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Link to Case</label>
+                  <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Paste Case ID (optional)" value={invoiceCaseId} onChange={(event) => setInvoiceCaseId(event.target.value)} />
+                  <p className="text-xs text-muted-foreground">Case search coming soon.</p>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Amount</label>
+                  <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Amount (optional)" value={invoiceAmount} onChange={(event) => setInvoiceAmount(event.target.value)} />
+                </div>
+              </div>
+            </div>
+            <Separator />
+            <p className="text-xs text-muted-foreground">Draft first, then finalize line items and links from Finance.</p>
           </div>
-          <DialogFooter><Button onClick={() => void createInvoice()} disabled={busy}>{busy ? "Creating..." : "Create"}</Button></DialogFooter>
+          <DialogFooter className="border-t bg-slate-50 px-6 py-4">
+            <Button variant="ghost" onClick={() => closeDialogs()}>Cancel</Button>
+            <Button onClick={() => void createInvoice()} disabled={busy}>{busy ? "Creating..." : "Create Draft"}</Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={createType === "approval"} onOpenChange={(open) => !open && closeDialogs()}>
-        <DialogContent>
+        <DialogContent onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader>
             <DialogTitle>Request Approval</DialogTitle>
             <DialogDescription>Request governance decision from a case context.</DialogDescription>
@@ -618,7 +647,7 @@ export function GlobalCreateEntry() {
       </Dialog>
 
       <Dialog open={createType === "company"} onOpenChange={(open) => !open && closeDialogs()}>
-        <DialogContent className="max-w-xl p-0">
+        <DialogContent className="max-w-xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader className="rounded-t-lg border-b bg-slate-50 px-6 py-5">
             <DialogTitle className="flex items-center gap-2">
               <Building2 className="h-5 w-5 text-slate-600" />

@@ -14,6 +14,7 @@ import { useObjectDrawers } from "@/components/layout/object-drawer-provider";
 import { useAppToast } from "@/components/layout/toast-provider";
 import { LifecycleBanner } from "@/components/shared/lifecycle-banner";
 import { ObjectDrawer } from "@/components/shared/object-drawer";
+import { NeedsAttentionFlag, SignalStack, SlaCountdownChip } from "@/components/shared/operational-signals";
 import { StatusPill } from "@/components/shared/status-pill";
 import { Button } from "@/components/ui/button";
 
@@ -26,6 +27,7 @@ const defaultSteps = [
 ];
 
 const emptyDrawerData: DealDrawerData = { timeline: [], linked: [] };
+const CONFLICT_TOAST_MESSAGE = "Update conflict detected. Another change was saved first. Refresh and try again.";
 
 export function DealDrawer() {
   const { dealId, openCase, closeDeal } = useObjectDrawers();
@@ -104,7 +106,7 @@ export function DealDrawer() {
       await load(dealId);
     } catch (err) {
       if (err instanceof ApiError && err.status === 409) {
-        pushToast("Conflict detected. Refresh and retry suggested.", "warning");
+        pushToast(CONFLICT_TOAST_MESSAGE, "warning");
         return;
       }
       pushToast(err instanceof Error ? err.message : "Action failed", "danger");
@@ -125,7 +127,7 @@ export function DealDrawer() {
       }
     } catch (err) {
       if (err instanceof ApiError && err.status === 409) {
-        pushToast("Conflict detected. Refresh and retry suggested.", "warning");
+        pushToast(CONFLICT_TOAST_MESSAGE, "warning");
         return;
       }
       pushToast(err instanceof Error ? err.message : "Failed to mark won", "danger");
@@ -217,6 +219,10 @@ export function DealDrawer() {
               <p><span className="font-medium">Stage:</span> {detail.stageName || "-"}</p>
               <p><span className="font-medium">Expected Close:</span> {detail.expectedCloseAt || "-"}</p>
               <p><span className="font-medium">Owner:</span> {detail.ownerName}</p>
+              <SignalStack>
+                <SlaCountdownChip dueAt={detail.expectedCloseAt} />
+                <NeedsAttentionFlag show={nearEnd && detail.status !== "WON"} label="Needs close decision" />
+              </SignalStack>
             </>
           ) : null}
         </div>

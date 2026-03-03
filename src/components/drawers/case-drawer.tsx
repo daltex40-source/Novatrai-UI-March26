@@ -6,6 +6,7 @@ import { useObjectDrawers } from "@/components/layout/object-drawer-provider";
 import { useAppToast } from "@/components/layout/toast-provider";
 import { LifecycleBanner } from "@/components/shared/lifecycle-banner";
 import { ObjectDrawer } from "@/components/shared/object-drawer";
+import { NeedsAttentionFlag, SignalStack, StuckBadge } from "@/components/shared/operational-signals";
 import { StatusPill } from "@/components/shared/status-pill";
 import { Button } from "@/components/ui/button";
 
@@ -22,6 +23,8 @@ const emptyData: CaseDrawerData = {
   linked: [],
   tasks: [],
 };
+
+const CONFLICT_TOAST_MESSAGE = "Update conflict detected. Another change was saved first. Refresh and try again.";
 
 export function CaseDrawer() {
   const navigate = useNavigate();
@@ -77,7 +80,7 @@ export function CaseDrawer() {
       await reload();
     } catch (err) {
       if (err instanceof ApiError && err.status === 409) {
-        pushToast("Status conflict detected. Please refresh data.", "warning");
+        pushToast(CONFLICT_TOAST_MESSAGE, "warning");
         return;
       }
       pushToast(err instanceof Error ? err.message : "Failed to update status", "danger");
@@ -173,6 +176,10 @@ export function CaseDrawer() {
               <p><span className="font-medium">Status:</span> {data.detail.status}</p>
               <p><span className="font-medium">Assigned Account:</span> {data.detail.accountName}</p>
               <p><span className="font-medium">Updated:</span> {new Date(data.detail.updatedAt).toLocaleString()}</p>
+              <SignalStack>
+                <StuckBadge since={data.detail.updatedAt} thresholdDays={14} />
+                <NeedsAttentionFlag show={data.detail.status === "WAITING"} label="Needs follow-up" />
+              </SignalStack>
             </>
           ) : null}
         </div>

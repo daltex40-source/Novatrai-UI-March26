@@ -3,6 +3,7 @@ import { decideApproval, getMyApprovals } from "@/api/services";
 import type { Approval } from "@/api/types";
 import { StatusPill } from "@/components/shared/status-pill";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function ApprovalsPage() {
   const [approvals, setApprovals] = useState<Approval[]>([]);
@@ -59,10 +60,17 @@ export function ApprovalsPage() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td className="px-4 py-5 text-muted-foreground" colSpan={4}>Loading approvals...</td></tr>
+              Array.from({ length: 5 }).map((_, index) => (
+                <tr key={`approvals-skeleton-${index}`} className="border-b last:border-b-0">
+                  <td className="px-4 py-3"><Skeleton className="h-4 w-56" /></td>
+                  <td className="px-4 py-3"><Skeleton className="h-4 w-32" /></td>
+                  <td className="px-4 py-3"><Skeleton className="h-6 w-24 rounded-full" /></td>
+                  <td className="px-4 py-3"><Skeleton className="h-8 w-36" /></td>
+                </tr>
+              ))
             ) : null}
             {!loading && approvals.length === 0 ? (
-              <tr><td className="px-4 py-5 text-muted-foreground" colSpan={4}>No approvals found.</td></tr>
+              <tr><td className="px-4 py-5 text-muted-foreground" colSpan={4}>No pending approvals right now.</td></tr>
             ) : null}
             {approvals.map((approval) => (
               <tr key={approval.id} className="border-b last:border-b-0">

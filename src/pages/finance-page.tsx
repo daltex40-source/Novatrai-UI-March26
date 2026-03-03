@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getInvoices, type Invoice } from "@/api/services";
 import { StatusPill } from "@/components/shared/status-pill";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type FinanceSection = "invoices" | "payments" | "ledger";
 
@@ -54,8 +55,18 @@ export function FinancePage() {
               </tr>
             </thead>
             <tbody>
-              {loading ? <tr><td className="px-4 py-5 text-muted-foreground" colSpan={5}>Loading invoices...</td></tr> : null}
-              {!loading && invoices.length === 0 ? <tr><td className="px-4 py-5 text-muted-foreground" colSpan={5}>No invoices found.</td></tr> : null}
+              {loading
+                ? Array.from({ length: 5 }).map((_, index) => (
+                    <tr key={`invoices-skeleton-${index}`} className="border-b last:border-b-0">
+                      <td className="px-4 py-3"><Skeleton className="h-4 w-28" /></td>
+                      <td className="px-4 py-3"><Skeleton className="h-4 w-40" /></td>
+                      <td className="px-4 py-3"><Skeleton className="h-4 w-24" /></td>
+                      <td className="px-4 py-3"><Skeleton className="h-4 w-28" /></td>
+                      <td className="px-4 py-3"><Skeleton className="h-6 w-20 rounded-full" /></td>
+                    </tr>
+                  ))
+                : null}
+              {!loading && invoices.length === 0 ? <tr><td className="px-4 py-5 text-muted-foreground" colSpan={5}>No invoices pending right now.</td></tr> : null}
               {invoices.map((invoice) => (
                 <tr key={invoice.id} className="border-b last:border-b-0">
                   <td className="px-4 py-3 font-medium">{invoice.invoiceNumber}</td>

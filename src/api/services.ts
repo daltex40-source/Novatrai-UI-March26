@@ -361,6 +361,9 @@ export type DealCard = {
   companyName: string;
   value: number;
   atRisk: boolean;
+  createdAt?: string;
+  expectedCloseAt?: string;
+  ageDays?: number | null;
 };
 
 export type DealDetail = {
@@ -407,6 +410,14 @@ function normalizeDeal(raw: unknown): DealCard | null {
       item.at_risk === true ||
       normalizeStatus(item.risk_level, "") === "HIGH" ||
       normalizeStatus(item.health, "") === "RISK",
+    createdAt: firstString(item.created_at, item.createdAt),
+    expectedCloseAt: firstString(item.expected_close_at, item.expectedCloseAt),
+    ageDays: (() => {
+      const raw = item.age_days;
+      if (typeof raw === "number" && Number.isFinite(raw)) return raw;
+      const parsed = Number.parseInt(firstString(raw), 10);
+      return Number.isFinite(parsed) ? parsed : null;
+    })(),
   };
 }
 
@@ -577,6 +588,9 @@ export async function createDealDraft(input: {
     companyName: input.companyName.trim(),
     value: Number.isFinite(input.value) ? input.value : 0,
     atRisk: false,
+    createdAt: new Date().toISOString(),
+    expectedCloseAt: "",
+    ageDays: 0,
   };
   const local = readLocalList<DealCard>(localDealDraftsKey);
   writeLocalList(localDealDraftsKey, [next, ...local]);

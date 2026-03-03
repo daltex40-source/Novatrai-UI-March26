@@ -14,8 +14,8 @@ type LifecycleBannerProps = {
 
 export function LifecycleBanner({ steps, activeKey, doneKeys = [] }: LifecycleBannerProps) {
   return (
-    <div className="rounded-lg border bg-white/80 p-2.5 shadow-sm">
-      <ol className="flex flex-wrap items-center gap-2">
+    <div className="rounded-lg border bg-white/90 p-3 shadow-sm">
+      <ol className="flex flex-wrap items-center gap-x-2 gap-y-2">
         {steps.map((step, index) => {
           const isActive = step.key === activeKey;
           const isDone = doneKeys.includes(step.key);
@@ -23,7 +23,7 @@ export function LifecycleBanner({ steps, activeKey, doneKeys = [] }: LifecycleBa
             <li key={step.key} className="flex items-center gap-2">
               <span
                 className={cn(
-                  "inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-medium",
+                  "inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-sm font-medium",
                   isActive && "border-primary bg-primary text-primary-foreground shadow-sm",
                   isDone && "border-slate-300 bg-slate-100 text-slate-700",
                   !isActive && !isDone && "border-slate-300 bg-white text-slate-600",
@@ -32,7 +32,7 @@ export function LifecycleBanner({ steps, activeKey, doneKeys = [] }: LifecycleBa
                 {isDone ? <Check className="h-3 w-3" /> : null}
                 {step.label}
               </span>
-              {index < steps.length - 1 ? <span className="h-px w-5 bg-slate-300" /> : null}
+              {index < steps.length - 1 ? <span className="h-px w-6 bg-slate-300" /> : null}
             </li>
           );
         })}
