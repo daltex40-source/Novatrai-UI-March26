@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +45,21 @@ function TrendBars({
 
 export function AnalyticsPage() {
   const { pipeline, execution, loading, error, refresh, usingFallback } = useAnalyticsData();
+  const [stageFilter, setStageFilter] = useState("");
+
+  const filteredStageConversions = useMemo(() => {
+    const query = stageFilter.trim().toLowerCase();
+    if (!query) return pipeline.stageConversions;
+    return pipeline.stageConversions.filter(
+      (row) => row.from.toLowerCase().includes(query) || row.to.toLowerCase().includes(query),
+    );
+  }, [pipeline.stageConversions, stageFilter]);
+
+  const filteredStuckByStage = useMemo(() => {
+    const query = stageFilter.trim().toLowerCase();
+    if (!query) return pipeline.stuckByStage;
+    return pipeline.stuckByStage.filter((row) => row.stage.toLowerCase().includes(query));
+  }, [pipeline.stuckByStage, stageFilter]);
 
   return (
     <section className="space-y-4">
@@ -70,6 +86,16 @@ export function AnalyticsPage() {
 
         <TabsContent value="pipeline">
           <div className="mt-4 space-y-4">
+            <div className="rounded-lg border bg-white p-3">
+              <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Filter Stage Metrics</label>
+              <input
+                className="mt-2 w-full rounded-md border bg-white px-3 py-2 text-sm"
+                placeholder="Search by stage name..."
+                value={stageFilter}
+                onChange={(event) => setStageFilter(event.target.value)}
+              />
+            </div>
+
             <div className="grid gap-4 md:grid-cols-3">
               <article className="rounded-lg border bg-white p-4">
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">Average Deal Cycle</p>
@@ -101,9 +127,9 @@ export function AnalyticsPage() {
 
             <article className="rounded-lg border bg-white p-4">
               <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Stage Conversion</h3>
-              <div className="mt-3 overflow-x-auto">
+              <div className="mt-3 max-h-80 overflow-auto rounded-md border">
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b text-xs uppercase tracking-wide text-muted-foreground">
+                  <thead className="sticky top-0 border-b bg-white text-xs uppercase tracking-wide text-muted-foreground">
                     <tr>
                       <th className="px-2 py-2">From</th>
                       <th className="px-2 py-2">To</th>
@@ -122,12 +148,12 @@ export function AnalyticsPage() {
                           </tr>
                         ))
                       : null}
-                    {!loading && pipeline.stageConversions.length === 0 ? (
+                    {!loading && filteredStageConversions.length === 0 ? (
                       <tr>
-                        <td className="px-2 py-4 text-muted-foreground" colSpan={4}>No stage conversion data yet.</td>
+                        <td className="px-2 py-4 text-muted-foreground" colSpan={4}>No stage conversion data for this filter.</td>
                       </tr>
                     ) : null}
-                    {pipeline.stageConversions.map((row) => (
+                    {filteredStageConversions.map((row) => (
                       <tr key={`${row.from}-${row.to}`} className="border-b last:border-b-0">
                         <td className="px-2 py-3">{row.from}</td>
                         <td className="px-2 py-3">{row.to}</td>
@@ -147,10 +173,10 @@ export function AnalyticsPage() {
                   {loading
                     ? Array.from({ length: 4 }).map((_, index) => <Skeleton key={`stuck-skeleton-${index}`} className="h-8 w-full" />)
                     : null}
-                  {!loading && pipeline.stuckByStage.length === 0 ? (
+                  {!loading && filteredStuckByStage.length === 0 ? (
                     <p className="text-sm text-muted-foreground">No stage data available.</p>
                   ) : null}
-                  {pipeline.stuckByStage.map((row) => (
+                  {filteredStuckByStage.map((row) => (
                     <div key={row.stage} className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
                       <span>{row.stage}</span>
                       <span className="text-muted-foreground">{row.stuckDeals} / {row.totalDeals}</span>

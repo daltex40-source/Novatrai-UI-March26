@@ -35,7 +35,7 @@ const items: SidebarItem[] = [
 
 export function Sidebar({ badges }: SidebarProps) {
   return (
-    <aside className="w-64 border-r bg-slate-100/80 p-4">
+    <aside className="w-64 border-r bg-slate-100/80 p-3 md:p-4">
       <div className="mb-6 rounded-md border bg-white px-3 py-2">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">Novatrai</p>
         <p className="text-sm font-semibold">Operating HQ</p>
@@ -50,13 +50,13 @@ export function Sidebar({ badges }: SidebarProps) {
               to={item.href}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center justify-between rounded-md px-3 py-2 text-sm",
+                  "flex items-center justify-between rounded-md px-3 py-2.5 text-sm",
                   isActive ? "bg-primary text-primary-foreground" : "hover:bg-muted",
                 )
               }
             >
               <span className="flex items-center gap-2">
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4 w-4 shrink-0" />
                 {item.label}
               </span>
               {badgeCount > 0 ? (

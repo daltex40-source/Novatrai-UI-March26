@@ -216,11 +216,42 @@ export function GlobalCreateEntry() {
     return dispose;
   }, []);
 
-  const recentItems = useMemo(() => getRecentItems(), [commandOpen]);
+  const recentItems = useMemo(() => getRecentItems(), []);
+
+  const dealValueNumber = Number.parseFloat(dealValue);
+  const dealValueValid = dealValue.trim() === "" || (Number.isFinite(dealValueNumber) && dealValueNumber >= 0);
+  const invoiceAmountNumber = Number.parseFloat(invoiceAmount);
+  const invoiceAmountValid = invoiceAmount.trim() === "" || (Number.isFinite(invoiceAmountNumber) && invoiceAmountNumber >= 0);
 
   const closeDialogs = () => {
     setCreateType(null);
     setBusy(false);
+  };
+
+  const isDialogDirty = (type: CreateType) => {
+    if (type === "deal") {
+      return Boolean(dealTitle.trim() || dealCompany.trim() || dealValue.trim() !== "0" || dealExpectedClose || selectedDealCompany);
+    }
+    if (type === "case") {
+      return Boolean(caseTitle.trim() || caseCompanyName.trim() || caseDueDate || selectedCaseCompany || casePriority !== "MEDIUM" || !assignToMe);
+    }
+    if (type === "task") {
+      return Boolean(taskTitle.trim() || taskDueDate || taskCaseId.trim());
+    }
+    if (type === "invoice") {
+      return Boolean(invoiceClient.trim() || invoiceCaseId.trim() || invoiceAmount.trim() !== "0" || selectedInvoiceCompany);
+    }
+    if (type === "approval") {
+      return Boolean(approvalTitle.trim() || approvalRequester.trim() || approvalCaseId.trim());
+    }
+    return Boolean(createCompanyName.trim() || createCompanyTradingName.trim());
+  };
+
+  const handleDialogOpenChange = (type: CreateType, open: boolean) => {
+    if (open) return;
+    if (!isDialogDirty(type) || window.confirm("Discard unsaved changes?")) {
+      closeDialogs();
+    }
   };
 
   const finishCreate = (message = "Created") => {
@@ -417,6 +448,7 @@ export function GlobalCreateEntry() {
                 <CommandItem onSelect={() => { setCommandOpen(false); navigate("/approvals"); }}>Approvals</CommandItem>
                 <CommandItem onSelect={() => { setCommandOpen(false); navigate("/documents"); }}>Documents</CommandItem>
                 <CommandItem onSelect={() => { setCommandOpen(false); navigate("/finance"); }}>Finance</CommandItem>
+                <CommandItem onSelect={() => { setCommandOpen(false); navigate("/automations"); }}>Automations</CommandItem>
               </CommandGroup>
 
               <CommandSeparator />
@@ -455,7 +487,7 @@ export function GlobalCreateEntry() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={createType === "deal"} onOpenChange={(open) => !open && closeDialogs()}>
+      <Dialog open={createType === "deal"} onOpenChange={(open) => handleDialogOpenChange("deal", open)}>
         <DialogContent className="max-w-xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader className="rounded-t-lg border-b bg-slate-50 px-6 py-5">
             <DialogTitle>New Deal</DialogTitle>
@@ -471,6 +503,7 @@ export function GlobalCreateEntry() {
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Deal Value</label>
                   <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Value" value={dealValue} onChange={(event) => setDealValue(event.target.value)} />
+                  {!dealValueValid ? <p className="text-xs text-rose-700">Enter a valid non-negative number.</p> : null}
                 </div>
                 <CompanyPicker
                   label="Company"
@@ -507,12 +540,12 @@ export function GlobalCreateEntry() {
           </div>
           <DialogFooter className="border-t bg-slate-50 px-6 py-4">
             <Button variant="ghost" onClick={() => closeDialogs()}>Cancel</Button>
-            <Button onClick={() => void createDeal()} disabled={busy}>{busy ? "Creating..." : "Create Deal"}</Button>
+            <Button onClick={() => void createDeal()} disabled={busy || !dealValueValid}>{busy ? "Creating..." : "Create Deal"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <Dialog open={createType === "case"} onOpenChange={(open) => !open && closeDialogs()}>
+      <Dialog open={createType === "case"} onOpenChange={(open) => handleDialogOpenChange("case", open)}>
         <DialogContent className="max-w-xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader className="rounded-t-lg border-b bg-slate-50 px-6 py-5">
             <DialogTitle>New Case</DialogTitle>
@@ -566,23 +599,27 @@ export function GlobalCreateEntry() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={createType === "task"} onOpenChange={(open) => !open && closeDialogs()}>
-        <DialogContent onCloseAutoFocus={restoreCreateButtonFocus}>
+      <Dialog open={createType === "task"} onOpenChange={(open) => handleDialogOpenChange("task", open)}>
+        <DialogContent className="max-w-xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader>
             <DialogTitle>New Task</DialogTitle>
             <DialogDescription>Fast task capture with optional case link.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 px-6 pb-5 text-sm">
             <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Title" value={taskTitle} onChange={(event) => setTaskTitle(event.target.value)} />
+            {!taskTitle.trim() ? <p className="text-xs text-rose-700">Task title is required.</p> : null}
             <input type="date" className="w-full rounded-md border bg-white px-3 py-2" value={taskDueDate} onChange={(event) => setTaskDueDate(event.target.value)} />
             <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Paste Case ID (optional)" value={taskCaseId} onChange={(event) => setTaskCaseId(event.target.value)} />
             <p className="text-xs text-muted-foreground">Case search coming soon.</p>
           </div>
-          <DialogFooter><Button onClick={() => void createTask()} disabled={busy}>{busy ? "Creating..." : "Create"}</Button></DialogFooter>
+          <DialogFooter className="border-t bg-slate-50 px-6 py-4">
+            <Button variant="ghost" onClick={() => closeDialogs()}>Cancel</Button>
+            <Button onClick={() => void createTask()} disabled={busy || !taskTitle.trim()}>{busy ? "Creating..." : "Create Task"}</Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <Dialog open={createType === "invoice"} onOpenChange={(open) => !open && closeDialogs()}>
+      <Dialog open={createType === "invoice"} onOpenChange={(open) => handleDialogOpenChange("invoice", open)}>
         <DialogContent className="max-w-xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader className="rounded-t-lg border-b bg-slate-50 px-6 py-5">
             <DialogTitle>New Invoice Draft</DialogTitle>
@@ -618,6 +655,7 @@ export function GlobalCreateEntry() {
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Amount</label>
                   <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Amount (optional)" value={invoiceAmount} onChange={(event) => setInvoiceAmount(event.target.value)} />
+                  {!invoiceAmountValid ? <p className="text-xs text-rose-700">Enter a valid non-negative number.</p> : null}
                 </div>
               </div>
             </div>
@@ -626,28 +664,34 @@ export function GlobalCreateEntry() {
           </div>
           <DialogFooter className="border-t bg-slate-50 px-6 py-4">
             <Button variant="ghost" onClick={() => closeDialogs()}>Cancel</Button>
-            <Button onClick={() => void createInvoice()} disabled={busy}>{busy ? "Creating..." : "Create Draft"}</Button>
+            <Button onClick={() => void createInvoice()} disabled={busy || !invoiceAmountValid}>{busy ? "Creating..." : "Create Draft"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <Dialog open={createType === "approval"} onOpenChange={(open) => !open && closeDialogs()}>
-        <DialogContent onCloseAutoFocus={restoreCreateButtonFocus}>
+      <Dialog open={createType === "approval"} onOpenChange={(open) => handleDialogOpenChange("approval", open)}>
+        <DialogContent className="max-w-xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader>
             <DialogTitle>Request Approval</DialogTitle>
             <DialogDescription>Request governance decision from a case context.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 px-6 pb-5 text-sm">
             <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Title" value={approvalTitle} onChange={(event) => setApprovalTitle(event.target.value)} />
             <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Requester" value={approvalRequester} onChange={(event) => setApprovalRequester(event.target.value)} />
             <input className="w-full rounded-md border bg-white px-3 py-2" placeholder="Case ID" value={approvalCaseId} onChange={(event) => setApprovalCaseId(event.target.value)} />
             {caseContextId ? <p className="text-xs text-muted-foreground">Current case context: {caseContextId}</p> : null}
+            {!approvalCaseId.trim() && !caseContextId ? <p className="text-xs text-rose-700">Case ID is required for approval requests.</p> : null}
           </div>
-          <DialogFooter><Button onClick={() => void createApproval()} disabled={busy}>{busy ? "Creating..." : "Create"}</Button></DialogFooter>
+          <DialogFooter className="border-t bg-slate-50 px-6 py-4">
+            <Button variant="ghost" onClick={() => closeDialogs()}>Cancel</Button>
+            <Button onClick={() => void createApproval()} disabled={busy || (!approvalCaseId.trim() && !caseContextId)}>
+              {busy ? "Creating..." : "Create Approval"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <Dialog open={createType === "company"} onOpenChange={(open) => !open && closeDialogs()}>
+      <Dialog open={createType === "company"} onOpenChange={(open) => handleDialogOpenChange("company", open)}>
         <DialogContent className="max-w-xl p-0" onCloseAutoFocus={restoreCreateButtonFocus}>
           <DialogHeader className="rounded-t-lg border-b bg-slate-50 px-6 py-5">
             <DialogTitle className="flex items-center gap-2">

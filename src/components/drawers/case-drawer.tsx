@@ -131,6 +131,9 @@ export function CaseDrawer() {
     <ObjectDrawer
       open={Boolean(caseId)}
       onOpenChange={(open) => {
+        if (!open && noteText.trim() && !window.confirm("Discard your unsaved case note?")) {
+          return;
+        }
         if (!open) closeCase();
       }}
       title={data.detail?.title ?? "Case"}

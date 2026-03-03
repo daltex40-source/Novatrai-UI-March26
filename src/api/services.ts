@@ -784,7 +784,6 @@ export async function getDashboardSummaryKpis(): Promise<DashboardSummaryKpis> {
   let pipelineValue = 0;
   let openDeals = 0;
   let atRiskDeals = 0;
-  let winRate: number | null = null;
 
   if (pipelineBoardResult.status === "fulfilled") {
     pipelineValue = pipelineBoardResult.value.stages.reduce(

@@ -140,6 +140,9 @@ export function DealDrawer() {
     <ObjectDrawer
       open={Boolean(dealId)}
       onOpenChange={(open) => {
+        if (!open && lostReason.trim() && !window.confirm("Discard unsaved loss reason?")) {
+          return;
+        }
         if (!open) closeDeal();
       }}
       title={detail?.title ?? "Deal"}
