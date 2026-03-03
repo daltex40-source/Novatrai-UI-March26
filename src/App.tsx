@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { AppLayout } from "@/components/layout/app-layout";
 import { ApprovalsPage } from "@/pages/approvals-page";
 import { CasesPage } from "@/pages/cases-page";
+import { CompaniesPage } from "@/pages/companies-page";
 import { DashboardPage } from "@/pages/dashboard-page";
 import { DocumentsPage } from "@/pages/documents-page";
 import { FinancePage } from "@/pages/finance-page";
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/my-day" element={<MyDayPage />} />
         <Route path="/pipeline" element={<PipelinePage />} />
         <Route path="/cases" element={<CasesPage />} />
+        <Route path="/companies" element={<CompaniesPage />} />
         <Route path="/tasks" element={<TasksPage />} />
         <Route path="/approvals" element={<ApprovalsPage />} />
         <Route path="/documents" element={<DocumentsPage />} />

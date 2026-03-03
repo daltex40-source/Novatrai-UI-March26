@@ -1,30 +1,38 @@
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type LifecycleBannerProps = {
-  steps: string[];
-  currentStatus: string;
+type LifecycleStep = {
+  key: string;
+  label: string;
 };
 
-export function LifecycleBanner({ steps, currentStatus }: LifecycleBannerProps) {
-  const currentIndex = steps.findIndex((step) => step === currentStatus);
+type LifecycleBannerProps = {
+  steps: LifecycleStep[];
+  activeKey: string;
+  doneKeys?: string[];
+};
 
+export function LifecycleBanner({ steps, activeKey, doneKeys = [] }: LifecycleBannerProps) {
   return (
-    <div className="rounded-lg border bg-muted/30 p-3">
-      <ol className="flex flex-wrap gap-2 text-xs">
+    <div className="rounded-lg border bg-white/90 p-3 shadow-sm">
+      <ol className="flex flex-wrap items-center gap-x-2 gap-y-2">
         {steps.map((step, index) => {
-          const isDone = currentIndex > -1 && index < currentIndex;
-          const isCurrent = step === currentStatus;
+          const isActive = step.key === activeKey;
+          const isDone = doneKeys.includes(step.key);
           return (
-            <li
-              key={step}
-              className={cn(
-                "rounded-md border px-2 py-1 font-medium",
-                isCurrent && "border-primary bg-primary text-primary-foreground",
-                isDone && "border-emerald-300 bg-emerald-50 text-emerald-900",
-                !isDone && !isCurrent && "border-border bg-card text-muted-foreground",
-              )}
-            >
-              {step.replaceAll("_", " ")}
+            <li key={step.key} className="flex items-center gap-2">
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-sm font-medium",
+                  isActive && "border-primary bg-primary text-primary-foreground shadow-sm",
+                  isDone && "border-slate-300 bg-slate-100 text-slate-700",
+                  !isActive && !isDone && "border-slate-300 bg-white text-slate-600",
+                )}
+              >
+                {isDone ? <Check className="h-3 w-3" /> : null}
+                {step.label}
+              </span>
+              {index < steps.length - 1 ? <span className="h-px w-6 bg-slate-300" /> : null}
             </li>
           );
         })}

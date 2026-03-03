@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { getMyDayData, type MyDayData } from "@/api/services";
+import { NeedsAttentionFlag, SlaCountdownChip, SignalStack, StuckBadge } from "@/components/shared/operational-signals";
 import { StatusPill } from "@/components/shared/status-pill";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const emptyState: MyDayData = {
   overdueTasks: [],
@@ -37,7 +39,34 @@ export function MyDayPage() {
       </header>
 
       {error ? <p className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900">{error}</p> : null}
-      {loading ? <p className="rounded-md border bg-white px-3 py-2 text-sm text-muted-foreground">Loading your workday...</p> : null}
+      {loading ? (
+        <div className="space-y-4">
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div className="rounded-lg border bg-white p-4">
+              <Skeleton className="h-4 w-28" />
+              <div className="mt-3 space-y-2">
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+              </div>
+            </div>
+            <div className="rounded-lg border bg-white p-4">
+              <Skeleton className="h-4 w-32" />
+              <div className="mt-3 space-y-2">
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+              </div>
+            </div>
+          </div>
+          <div className="rounded-lg border bg-white p-4">
+            <Skeleton className="h-4 w-24" />
+            <div className="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
+              <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-20 w-full" />
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
         <article className="rounded-lg border bg-white p-4">
@@ -49,8 +78,12 @@ export function MyDayPage() {
                 <p className="font-medium">{task.title}</p>
                 <div className="mt-1 flex items-center justify-between">
                   <p className="text-xs text-muted-foreground">Due {task.dueDate || "Not set"}</p>
-                  <StatusPill status={task.status} />
+                  <StatusPill kind="task" value={task.status} />
                 </div>
+                <SignalStack className="mt-2">
+                  <SlaCountdownChip dueAt={task.dueDate} />
+                  <NeedsAttentionFlag show label="Execution blocked" />
+                </SignalStack>
               </div>
             ))}
           </div>
@@ -65,7 +98,7 @@ export function MyDayPage() {
                 <p className="font-medium">{approval.title}</p>
                 <div className="mt-1 flex items-center justify-between">
                   <p className="text-xs text-muted-foreground">{approval.requester}</p>
-                  <StatusPill status={approval.status} />
+                  <StatusPill kind="approval" value={approval.status} />
                 </div>
               </div>
             ))}
@@ -81,9 +114,11 @@ export function MyDayPage() {
             <div key={item.id} className="rounded-md border p-3 text-sm">
               <p className="font-medium">{item.title}</p>
               <p className="mt-1 text-xs text-muted-foreground">{item.accountName}</p>
-              <div className="mt-2">
-                <StatusPill status={item.status} />
-              </div>
+              <div className="mt-2"><StatusPill kind="case" value={item.status} /></div>
+              <SignalStack className="mt-2">
+                <StuckBadge since={item.updatedAt} thresholdDays={14} />
+                <NeedsAttentionFlag show={item.status === "WAITING"} label="Needs follow-up" />
+              </SignalStack>
             </div>
           ))}
         </div>

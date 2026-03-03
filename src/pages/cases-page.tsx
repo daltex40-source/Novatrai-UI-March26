@@ -1,24 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { addCaseNote, getCaseById, getCaseNotes, getMyCases, updateCaseStatus } from "@/api/services";
-import type { Case, CaseNote } from "@/api/types";
-import { LifecycleBanner } from "@/components/shared/lifecycle-banner";
-import { ObjectDrawer } from "@/components/shared/object-drawer";
+import { getMyCases } from "@/api/services";
+import type { Case } from "@/api/types";
+import { useObjectDrawers } from "@/components/layout/object-drawer-provider";
+import { NeedsAttentionFlag, SignalStack, StuckBadge } from "@/components/shared/operational-signals";
 import { StatusPill } from "@/components/shared/status-pill";
-import { Button } from "@/components/ui/button";
-
-const caseLifecycle = ["OPEN", "IN_PROGRESS", "WAITING", "CLOSED", "CANCELLED"];
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function CasesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { openCase } = useObjectDrawers();
   const [cases, setCases] = useState<Case[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
-  const [updatingStatus, setUpdatingStatus] = useState(false);
-  const [notes, setNotes] = useState<CaseNote[]>([]);
-  const [noteText, setNoteText] = useState("");
-  const [savingNote, setSavingNote] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -38,78 +32,13 @@ export function CasesPage() {
   useEffect(() => {
     const openCaseId = searchParams.get("caseId");
     if (!openCaseId || cases.length === 0) return;
-
     const exists = cases.some((item) => item.id === openCaseId);
     if (!exists) return;
 
-    setSelectedCaseId(openCaseId);
+    openCase(openCaseId);
     searchParams.delete("caseId");
     setSearchParams(searchParams, { replace: true });
-  }, [cases, searchParams, setSearchParams]);
-
-  const selectedCase = useMemo(
-    () => cases.find((item) => item.id === selectedCaseId) ?? null,
-    [cases, selectedCaseId],
-  );
-
-  useEffect(() => {
-    if (!selectedCaseId) {
-      setNotes([]);
-      return;
-    }
-    const loadNotes = async () => {
-      try {
-        setNotes(await getCaseNotes(selectedCaseId));
-      } catch {
-        setNotes([]);
-      }
-    };
-    void loadNotes();
-  }, [selectedCaseId]);
-
-  const promoteCaseStatus = async () => {
-    if (!selectedCase) return;
-
-    const nextStatus: Case["status"] =
-      selectedCase.status === "OPEN" || selectedCase.status === "WAITING" ? "IN_PROGRESS" : "CLOSED";
-
-    setUpdatingStatus(true);
-    setError(null);
-    try {
-      await updateCaseStatus(selectedCase.id, nextStatus);
-      const refreshed = await getCaseById(selectedCase.id);
-      setCases((current) =>
-        current.map((item) =>
-          item.id === selectedCase.id
-            ? {
-                ...item,
-                status: refreshed?.status ?? nextStatus,
-                updatedAt: refreshed?.updatedAt ?? new Date().toISOString(),
-              }
-            : item,
-        ),
-      );
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update case status");
-    } finally {
-      setUpdatingStatus(false);
-    }
-  };
-
-  const submitNote = async () => {
-    if (!selectedCaseId || !noteText.trim()) return;
-    setSavingNote(true);
-    setError(null);
-    try {
-      await addCaseNote(selectedCaseId, noteText.trim());
-      setNoteText("");
-      setNotes(await getCaseNotes(selectedCaseId));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save note");
-    } finally {
-      setSavingNote(false);
-    }
-  };
+  }, [cases, openCase, searchParams, setSearchParams]);
 
   return (
     <section className="space-y-4">
@@ -127,92 +56,48 @@ export function CasesPage() {
               <th className="px-4 py-3">Case</th>
               <th className="px-4 py-3">Account</th>
               <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Signals</th>
               <th className="px-4 py-3">Updated</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td className="px-4 py-5 text-muted-foreground" colSpan={4}>
-                  Loading cases...
-                </td>
-              </tr>
+              Array.from({ length: 5 }).map((_, index) => (
+                <tr key={`cases-skeleton-${index}`} className="border-b last:border-b-0">
+                  <td className="px-4 py-3"><Skeleton className="h-4 w-48" /></td>
+                  <td className="px-4 py-3"><Skeleton className="h-4 w-36" /></td>
+                  <td className="px-4 py-3"><Skeleton className="h-6 w-24 rounded-full" /></td>
+                  <td className="px-4 py-3"><Skeleton className="h-4 w-32" /></td>
+                  <td className="px-4 py-3"><Skeleton className="h-4 w-40" /></td>
+                </tr>
+              ))
             ) : null}
             {!loading && cases.length === 0 ? (
               <tr>
-                <td className="px-4 py-5 text-muted-foreground" colSpan={4}>
-                  No cases found.
-                </td>
+                <td className="px-4 py-5 text-muted-foreground" colSpan={5}>No active cases to review right now.</td>
               </tr>
             ) : null}
             {cases.map((item) => (
-              <tr key={item.id} className="cursor-pointer border-b last:border-b-0 hover:bg-slate-50" onClick={() => setSelectedCaseId(item.id)}>
+              <tr
+                key={item.id}
+                className="cursor-pointer border-b last:border-b-0 hover:bg-slate-50"
+                onClick={() => openCase(item.id)}
+              >
                 <td className="px-4 py-3 font-medium">{item.title}</td>
                 <td className="px-4 py-3">{item.accountName}</td>
-                <td className="px-4 py-3"><StatusPill status={item.status} /></td>
+                <td className="px-4 py-3"><StatusPill kind="case" value={item.status} /></td>
+                <td className="px-4 py-3">
+                  <SignalStack>
+                    <StuckBadge since={item.updatedAt} thresholdDays={14} />
+                    <NeedsAttentionFlag show={item.status === "WAITING"} label="Waiting block" />
+                  </SignalStack>
+                </td>
                 <td className="px-4 py-3 text-muted-foreground">{new Date(item.updatedAt).toLocaleString()}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      <ObjectDrawer
-        open={Boolean(selectedCase)}
-        onOpenChange={(open) => {
-          if (!open) {
-            setSelectedCaseId(null);
-            setNoteText("");
-          }
-        }}
-        title={selectedCase?.title ?? "Case"}
-        status={selectedCase?.status ?? "OPEN"}
-        lifecycleSteps={caseLifecycle}
-        currentStatus={selectedCase?.status ?? "OPEN"}
-        primaryAction={
-          <Button size="sm" onClick={() => void promoteCaseStatus()} disabled={updatingStatus}>
-            {updatingStatus ? "Updating..." : "Advance Status"}
-          </Button>
-        }
-        overview={
-          <div className="space-y-3 text-sm">
-            <p><span className="font-medium">Case ID:</span> {selectedCase?.id}</p>
-            <p><span className="font-medium">Account:</span> {selectedCase?.accountName}</p>
-            <LifecycleBanner steps={caseLifecycle} currentStatus={selectedCase?.status ?? "OPEN"} />
-          </div>
-        }
-        timeline={
-          <div className="space-y-3 text-sm">
-            <div className="space-y-2">
-              <textarea
-                className="min-h-24 w-full rounded-md border p-2"
-                placeholder="Add a case note..."
-                value={noteText}
-                onChange={(event) => setNoteText(event.target.value)}
-              />
-              <Button size="sm" variant="secondary" onClick={() => void submitNote()} disabled={savingNote || !noteText.trim()}>
-                {savingNote ? "Saving..." : "Add Note"}
-              </Button>
-            </div>
-
-            {notes.length === 0 ? <p className="text-muted-foreground">No timeline notes yet.</p> : null}
-            {notes.map((note) => (
-              <div key={note.id} className="rounded-md border p-3">
-                <p>{note.text}</p>
-                <p className="mt-2 text-xs text-muted-foreground">
-                  {note.authorName} - {new Date(note.createdAt).toLocaleString()}
-                </p>
-              </div>
-            ))}
-          </div>
-        }
-        linked={
-          <div className="space-y-2 text-sm">
-            <p className="rounded-md border p-3">Document: MSA Amendment v4</p>
-            <p className="rounded-md border p-3">Task: Legal review follow-up</p>
-          </div>
-        }
-      />
     </section>
   );
 }

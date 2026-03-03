@@ -3,6 +3,7 @@ import { completeTask, getMyTasks } from "@/api/services";
 import type { Task } from "@/api/types";
 import { StatusPill } from "@/components/shared/status-pill";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -59,31 +60,25 @@ export function TasksPage() {
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td className="px-4 py-5 text-muted-foreground" colSpan={4}>
-                  Loading tasks...
-                </td>
-              </tr>
+              Array.from({ length: 5 }).map((_, index) => (
+                <tr key={`tasks-skeleton-${index}`} className="border-b last:border-b-0">
+                  <td className="px-4 py-3"><Skeleton className="h-4 w-48" /></td>
+                  <td className="px-4 py-3"><Skeleton className="h-4 w-24" /></td>
+                  <td className="px-4 py-3"><Skeleton className="h-6 w-20 rounded-full" /></td>
+                  <td className="px-4 py-3"><Skeleton className="h-8 w-24" /></td>
+                </tr>
+              ))
             ) : null}
             {!loading && tasks.length === 0 ? (
-              <tr>
-                <td className="px-4 py-5 text-muted-foreground" colSpan={4}>
-                  No tasks found.
-                </td>
-              </tr>
+              <tr><td className="px-4 py-5 text-muted-foreground" colSpan={4}>No tasks need attention right now.</td></tr>
             ) : null}
             {tasks.map((task) => (
               <tr key={task.id} className="border-b last:border-b-0">
                 <td className="px-4 py-3 font-medium">{task.title}</td>
                 <td className="px-4 py-3">{task.dueDate}</td>
-                <td className="px-4 py-3"><StatusPill status={task.status} /></td>
+                <td className="px-4 py-3"><StatusPill kind="task" value={task.status} /></td>
                 <td className="px-4 py-3">
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => void onCompleteTask(task.id)}
-                    disabled={task.status === "COMPLETED" || busyTaskId === task.id}
-                  >
+                  <Button size="sm" variant="secondary" onClick={() => void onCompleteTask(task.id)} disabled={task.status === "COMPLETED" || busyTaskId === task.id}>
                     {busyTaskId === task.id ? "Saving..." : "Complete"}
                   </Button>
                 </td>

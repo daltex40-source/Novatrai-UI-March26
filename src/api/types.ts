@@ -17,6 +17,9 @@ export const taskSchema = z.object({
   title: z.string(),
   dueDate: z.string(),
   status: taskStatusSchema,
+  caseId: z.string().nullable().optional(),
+  caseNumber: z.string().nullable().optional(),
+  createdAt: z.string().optional(),
 });
 
 export const approvalSchema = z.object({
@@ -24,6 +27,10 @@ export const approvalSchema = z.object({
   title: z.string(),
   requester: z.string(),
   status: approvalDecisionSchema,
+  caseId: z.string().nullable().optional(),
+  caseNumber: z.string().nullable().optional(),
+  createdAt: z.string().optional(),
+  decidedAt: z.string().optional(),
 });
 
 export type Case = z.infer<typeof caseSchema>;

@@ -1,10 +1,12 @@
-import { Bell, Search } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { HQInboxButton } from "@/components/inbox/hq-inbox-button";
+import { GlobalCreateEntry } from "./global-create-entry";
 
 const titles: Record<string, string> = {
   "/": "Dashboard",
   "/my-day": "My Day",
   "/pipeline": "Pipeline",
+  "/companies": "Companies",
   "/cases": "Cases",
   "/tasks": "Tasks",
   "/approvals": "Approvals",
@@ -23,12 +25,8 @@ export function Header() {
         <h1 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">{title}</h1>
       </div>
       <div className="flex items-center gap-3 text-muted-foreground">
-        <button className="rounded-md p-2 hover:bg-muted" aria-label="Search">
-          <Search className="h-4 w-4" />
-        </button>
-        <button className="rounded-md p-2 hover:bg-muted" aria-label="Notifications">
-          <Bell className="h-4 w-4" />
-        </button>
+        <GlobalCreateEntry />
+        <HQInboxButton />
       </div>
     </header>
   );
