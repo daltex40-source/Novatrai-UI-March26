@@ -4,6 +4,7 @@ import { GlobalCreateEntry } from "./global-create-entry";
 
 const titles: Record<string, string> = {
   "/": "Dashboard",
+  "/analytics": "Analytics",
   "/my-day": "My Day",
   "/pipeline": "Pipeline",
   "/companies": "Companies",

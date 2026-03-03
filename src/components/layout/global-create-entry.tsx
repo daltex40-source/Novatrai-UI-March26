@@ -408,6 +408,7 @@ export function GlobalCreateEntry() {
 
               <CommandGroup heading="Navigate">
                 <CommandItem onSelect={() => { setCommandOpen(false); navigate("/"); }}>Dashboard</CommandItem>
+                <CommandItem onSelect={() => { setCommandOpen(false); navigate("/analytics"); }}>Analytics</CommandItem>
                 <CommandItem onSelect={() => { setCommandOpen(false); navigate("/my-day"); }}>My Day</CommandItem>
                 <CommandItem onSelect={() => { setCommandOpen(false); navigate("/pipeline"); }}>Pipeline</CommandItem>
                 <CommandItem onSelect={() => { setCommandOpen(false); navigate("/cases"); }}>Cases</CommandItem>
